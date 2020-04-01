@@ -5,10 +5,9 @@ Let's make the Baemin webpage.
 
 Getting Started 
 ---------------
-> yarn install 
-> yarn build 
-> yarn start 
-> <http://localhost:8080/>
+1. `$ yarn install`
+2. `$ yarn build`
+3. `$ yarn start`
+4. Go to <http://localhost:8080/>
 
-By. yonikim 
-Literary Property. baemin
+> By. yonikim & Literary Property. baemin

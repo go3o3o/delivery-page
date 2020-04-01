@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import { inject, observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
 
+import 'antd/dist/antd.css';
+
 import { PAGE_PATHS, STORES } from './constants';
 import Login from './pages/Signin';
 import CategoryList from './pages/CategoryList';

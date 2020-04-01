@@ -1,9 +1,10 @@
 import React, { useEffect, ChangeEvent } from 'react';
+import { RouteComponentProps } from 'react-router';
 import { inject, observer } from 'mobx-react';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
-import { RouteComponentProps } from 'react-router';
+import Header from '../../components/Header';
 
 interface InjectedProps {
   [STORES.AUTH_STORE]: AuthStore;
@@ -33,7 +34,10 @@ function Signin(props: InjectedProps & RouteComponentProps) {
 
   return (
     <>
-      <p>로그인</p>
+      <div style={{ width: '100%', height: '100%', backgroundColor: '#5FBEBB' }}>
+        <Header />
+        <div>Login</div>
+      </div>
     </>
   );
 }

@@ -34,11 +34,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.css'],
   },
   output: {
-<<<<<<< HEAD
-    path: path.join(__dirname, '/dist'),
-=======
     path: path.join(__dirname, '../dist'),
->>>>>>> feature/client
     filename: 'bundle.js',
     publicPath: '/',
   },

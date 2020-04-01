@@ -25,7 +25,7 @@ class AuthStore {
       () => this.token,
       token => {
         if (token != null) window.sessionStorage.setItem('jwt', token);
-      }
+      },
     );
   }
 
@@ -38,7 +38,7 @@ class AuthStore {
   async login() {
     const body: LoginSignupRequestDto = {
       email: this.email,
-      password: this.password
+      password: this.password,
     };
     const response = await this.authService.login(body);
     this.setToken(response.data.data.token);

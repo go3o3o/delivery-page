@@ -7,9 +7,14 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack --mode development",
+<<<<<<< HEAD
     "webpack": "webpack",
     "dev": "yarn run webpack --mode development --watch",
     "build": "yarn run webpack --mode production"
+=======
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
+>>>>>>> feature/client
   },
   "dependencies": {
     "@babel/core": "^7.6.4",

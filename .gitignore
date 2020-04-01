@@ -6,12 +6,14 @@
 /node_modules
 /.pnp
 .pnp.js
+./client/assets
 
 # testing
 /coverage
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store

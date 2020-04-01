@@ -6,7 +6,7 @@ export enum STORES {
 
 export enum PAGE_PATHS {
   SIGNUP = '/signup',
-  SIGNIN = 'signin',
+  SIGNIN = '/signin',
   CATEGORY_LISTS = '/category',
   CATEGORY_MENU_LIST = '/menu'
 }

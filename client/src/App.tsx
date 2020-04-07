@@ -9,6 +9,8 @@ import { PAGE_PATHS, STORES } from './constants';
 import Login from './pages/Signin';
 import CategoryList from './pages/CategoryList';
 
+import 'antd/dist/antd.css';
+
 @inject(STORES.AUTH_STORE)
 @observer
 @autobind

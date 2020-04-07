@@ -12,7 +12,7 @@ temp/
 /node_modules
 /.pnp
 .pnp.js
-./client/assets
+./client/src/assets
 
 # testing
 /coverage

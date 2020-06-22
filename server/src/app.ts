@@ -4,7 +4,7 @@ import * as http from 'http';
 import * as cors from 'cors';
 import { createConnection } from 'typeorm';
 
-import config from './config';
+import { dbConf } from './config';
 import logger from './logger';
 
 import authRouter from './routes/auth';
@@ -32,7 +32,14 @@ async function runServer() {
     logger.debug('Example app listening on port 8000!');
   });
 
-  createConnection({ type: 'mysql', url: config.db.url })
+  await createConnection({
+    type: 'mysql',
+    host: dbConf.HOST,
+    port: dbConf.PORT,
+    username: dbConf.USERNAME,
+    password: dbConf.PASSWORD,
+    database: dbConf.DATABASE,
+  })
     .then(async connection => {
       logger.debug('Connected to DB');
     })

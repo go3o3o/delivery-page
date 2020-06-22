@@ -1,14 +1,14 @@
 import * as express from 'express';
 import * as jwt from 'jwt-simple';
 
-import config from '../config';
+import { authConf } from '../config';
 import { Member } from '../entities/Member';
 
 const router = express.Router();
 
 const isValidEmail = (email: string) => {
   const regex = new RegExp(
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   );
 
   return regex.test(email);
@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
   if (user) {
     const isValidPassword = user.validPassword(password);
     if (isValidPassword) {
-      const token = jwt.encode({ seq: user.seq, email: user.email }, config.auth.key);
+      const token = jwt.encode({ seq: user.seq, email: user.email }, authConf.AUTH_KEY);
       res.json({ data: { token, user }, msg: '로그인 성공!' });
     } else {
       return res.status(400).json({ msg: '비밀번호가 잘 못 되었습니다.' });
@@ -56,7 +56,7 @@ router.post('/signup', async (req, res) => {
   }
 
   const user = await Member.findOne({
-    where: { email }
+    where: { email },
   });
 
   if (user) {
@@ -67,7 +67,7 @@ router.post('/signup', async (req, res) => {
 
   return res.json({
     data: { seq: createdUser.seq },
-    msg: '가입에 성공하였습니다.'
+    msg: '가입에 성공하였습니다.',
   });
 });
 

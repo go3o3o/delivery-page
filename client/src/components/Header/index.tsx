@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import { Input, Button, Row, Col, Layout } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
-import key from '../../assets/key';
-
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 import { AddressList } from './AddressList';
@@ -21,7 +19,7 @@ class Header extends Component {
       longitude: 0,
       latitude: 0,
       address: '',
-      addressList: []
+      addressList: [],
     };
 
     this.getLocation = this.getLocation.bind(this);
@@ -51,8 +49,8 @@ class Header extends Component {
       fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.state['keyword']}`, {
         method: 'GET',
         headers: {
-          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8'
-        }
+          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8',
+        },
       })
         .then(res => res.json())
         .then(json => console.log(json))
@@ -64,17 +62,13 @@ class Header extends Component {
   getLocationAddress = () => {
     // console.log(this.state['longitude'], this.state['latitude']);
     fetch(
-<<<<<<< HEAD
-      `http://www.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=10&keyword=${keyword}&confmKey=${key}&resultType=json`,
-=======
       `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${this.state['longitude']}&y=${this.state['latitude']}`,
       {
         method: 'GET',
         headers: {
-          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8'
-        }
-      }
->>>>>>> develop
+          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8',
+        },
+      },
     )
       .then(res => res.json())
       .then(json => {
@@ -102,8 +96,8 @@ class Header extends Component {
         {
           enableHighAccuracy: false,
           maximumAge: 0,
-          timeout: Infinity
-        }
+          timeout: Infinity,
+        },
       );
     } else {
       alert('GPS를 지원하지 않습니다.');
@@ -158,19 +152,6 @@ class Header extends Component {
               </div>
             </Col>
             <Col flex={2}>
-<<<<<<< HEAD
-              <Link to={`${PAGE_PATHS.SIGNIN}`}>
-                <Button
-                  style={{
-                    backgroundColor: '#5FBEBB',
-                    borderColor: 'white',
-                    height: 40,
-                  }}
-                >
-                  <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
-                </Button>
-              </Link>
-=======
               <div style={{ display: 'inline' }}>
                 <Link to={`${PAGE_PATHS.SIGNIN}`}>
                   <Button
@@ -178,14 +159,13 @@ class Header extends Component {
                       backgroundColor: '#5FBEBB',
                       borderColor: 'white',
                       height: 40,
-                      verticalAlign: 'top'
+                      verticalAlign: 'top',
                     }}
                   >
                     <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
                   </Button>
                 </Link>
               </div>
->>>>>>> develop
             </Col>
           </Row>
         </div>

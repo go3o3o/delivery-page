@@ -6,7 +6,7 @@
   "author": "yonikim",
   "license": "MIT",
   "scripts": {
-    "start:dev": "nodemon --config ./nodemon.json",
+    "start:dev": "cp ../.env ../.env.dev && nodemon --config ./nodemon.json",
     "build": "rm -rf ./build/ && tsc",
     "start": "node build/app.js"
   },

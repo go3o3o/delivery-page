@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { Input, Button, Row, Col, Layout } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
+import config from '../assets/config';
+
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 import { AddressList } from './AddressList';
@@ -49,7 +51,7 @@ class Header extends Component {
       fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.state['keyword']}`, {
         method: 'GET',
         headers: {
-          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8',
+          Authorization: `KakaoAK ${config.KAKAO_KEY}`,
         },
       })
         .then(res => res.json())

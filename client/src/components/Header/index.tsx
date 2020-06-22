@@ -68,7 +68,7 @@ class Header extends Component {
       {
         method: 'GET',
         headers: {
-          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8',
+          Authorization: `KakaoAK ${config.KAKAO_KEY}`,
         },
       },
     )

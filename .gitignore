@@ -11,6 +11,8 @@ temp/
 /server/node_modules/
 /client/src/assets/
 
+/server/src/config.ts
+
 # testing
 /coverage
 

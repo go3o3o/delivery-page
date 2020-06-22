@@ -6,22 +6,35 @@ import { Link } from 'react-router-dom';
 import { Input, Button, Row, Col, Layout } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
-// @ts-ignore
-import Logo from '../../assets/logo-baemin.svg';
 import key from '../../assets/key';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 import { AddressList } from './AddressList';
+import { CodeNode } from 'source-list-map';
 
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { visible: false, address: '', addressList: [] };
+    this.state = {
+      visible: false,
+      keyword: '',
+      longitude: 0,
+      latitude: 0,
+      address: '',
+      addressList: []
+    };
+
+    this.getLocation = this.getLocation.bind(this);
+    this.setAddress = this.setAddress.bind(this);
+  }
+
+  componentWillMount() {
+    this.getLocation();
   }
 
   setAddress = e => {
-    this.setState({ address: e.target.value });
+    this.setState({ keyword: e.target.value });
   };
 
   pushAddrs = json => {
@@ -32,14 +45,66 @@ class Header extends Component {
     this.setState({ addressList: tempAddr });
   };
 
-  findAddress = () => {
-    let keyword = this.state['address'];
+  getAddress = () => {
+    // console.log(this.state['address']);
+    console.log(this.state['keyword']);
+    if (this.state['keyword'].length > 0) {
+      fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.state['keyword']}`, {
+        method: 'GET',
+        headers: {
+          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8'
+        }
+      })
+        .then(res => res.json())
+        .then(json => console.log(json))
+        .catch(err => console.log(err));
+    }
+  };
+
+  // 경도와 위도로 찾기
+  getLocationAddress = () => {
+    // console.log(this.state['longitude'], this.state['latitude']);
     fetch(
-      `http://www.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=10&keyword=${keyword}&confmKey=${key}&resultType=json`
+      `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${this.state['longitude']}&y=${this.state['latitude']}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: 'KakaoAK dfe46d636db22ea56b4bc115ed547cf8'
+        }
+      }
     )
       .then(res => res.json())
-      .then(json => console.log(json))
+      .then(json => {
+        // console.log(Object.keys(json));
+        if (json.documents.length > 0) {
+          this.setState({ address: json.documents[0].address.address_name });
+        }
+      })
       .catch(err => console.log(err));
+  };
+
+  getLocation = () => {
+    if (navigator.geolocation) {
+      // GPS 를 지원하면
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          let longitude = position.coords.longitude;
+          let latitude = position.coords.latitude;
+          this.setState({ longitude, latitude });
+          this.getLocationAddress();
+        },
+        err => {
+          console.log(err);
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 0,
+          timeout: Infinity
+        }
+      );
+    } else {
+      alert('GPS를 지원하지 않습니다.');
+    }
   };
 
   setAddressListVisible = () => {
@@ -58,16 +123,14 @@ class Header extends Component {
     return (
       <>
         <div style={{ textAlign: 'center', padding: '40px 100px 40px 120px' }}>
-          <Row align="middle">
+          <Row justify="center" align="middle">
             <Col flex={3} style={{ textAlign: 'left' }}>
-              <Link to={'/'} style={{ marginRight: 30 }}>
-                <img className="logo" alt="배달의민족" width="250" src={Logo} />
-              </Link>
+              <Link to={'/'} style={{ marginRight: 30 }}></Link>
               <div style={{ display: 'inline' }}>
                 <Input
                   placeholder="건물명, 도로명, 지번으로 검색하세요."
                   suffix={
-                    <a onClick={this.findAddress}>
+                    <a onClick={this.getAddress}>
                       <SearchOutlined
                         style={{
                           color: '#5FBEBB',
@@ -78,12 +141,12 @@ class Header extends Component {
                     </a>
                   }
                   style={{ width: 330, height: 40 }}
-                  value={this.state['address']}
+                  value={this.state['keyword']}
                   onChange={this.setAddress}
-                  onClick={this.setAddressListVisible}
+                  onClick={this.getAddress}
                 />
                 {this.state['visible'] && (
-                  <ul style={{ border: 1, marginTop: 2, width: 330, tabindex: -1 }}>
+                  <ul style={{ border: 1, marginTop: 2, width: 330 }}>
                     <li>test1</li>
                     <li>test2</li>
                     {/* <AddressList list={addrs} /> */}
@@ -92,17 +155,20 @@ class Header extends Component {
               </div>
             </Col>
             <Col flex={2}>
-              <Link to={`${PAGE_PATHS.SIGNIN}`}>
-                <Button
-                  style={{
-                    backgroundColor: '#5FBEBB',
-                    borderColor: 'white',
-                    height: 40
-                  }}
-                >
-                  <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
-                </Button>
-              </Link>
+              <div style={{ display: 'inline' }}>
+                <Link to={`${PAGE_PATHS.SIGNIN}`}>
+                  <Button
+                    style={{
+                      backgroundColor: '#5FBEBB',
+                      borderColor: 'white',
+                      height: 40,
+                      verticalAlign: 'top'
+                    }}
+                  >
+                    <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
+                  </Button>
+                </Link>
+              </div>
             </Col>
           </Row>
         </div>

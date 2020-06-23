@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import { Layout, Input, Button, Row, Col } from 'antd';
 import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
-import config from '../assets/config';
-
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 import { AddressList } from './AddressList';
@@ -26,6 +24,11 @@ class Header extends Component {
 
     this.getLocation = this.getLocation.bind(this);
     this.setAddress = this.setAddress.bind(this);
+  }
+
+  componentWillMount() {
+    console.log(process.env.KAKAO_KEY);
+    this.getLocation();
   }
 
   setAddress = e => {
@@ -48,7 +51,7 @@ class Header extends Component {
       fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.state['address']}`, {
         method: 'GET',
         headers: {
-          Authorization: `KakaoAK ${config.KAKAO_KEY}`,
+          Authorization: `KakaoAK ${process.env.KAKAO_KEY}`,
         },
       })
         .then(res => res.json())
@@ -65,7 +68,7 @@ class Header extends Component {
       {
         method: 'GET',
         headers: {
-          Authorization: `KakaoAK ${config.KAKAO_KEY}`,
+          Authorization: `KakaoAK ${process.env.KAKAO_KEY}`,
         },
       },
     )

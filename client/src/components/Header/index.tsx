@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { Input, Button, Row, Col, Layout } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-
-import config from '../assets/config';
+import { Layout, Input, Button, Row, Col } from 'antd';
+import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
@@ -17,7 +15,7 @@ class Header extends Component {
     super(props);
     this.state = {
       visible: false,
-      keyword: '',
+      location: false,
       longitude: 0,
       latitude: 0,
       address: '',
@@ -29,11 +27,12 @@ class Header extends Component {
   }
 
   componentWillMount() {
+    console.log(process.env.KAKAO_KEY);
     this.getLocation();
   }
 
   setAddress = e => {
-    this.setState({ keyword: e.target.value });
+    this.setState({ address: e.target.value });
   };
 
   pushAddrs = json => {
@@ -44,14 +43,15 @@ class Header extends Component {
     this.setState({ addressList: tempAddr });
   };
 
+  // 키워드로 주소 찾기
   getAddress = () => {
     // console.log(this.state['address']);
-    console.log(this.state['keyword']);
-    if (this.state['keyword'].length > 0) {
-      fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.state['keyword']}`, {
+    console.log(this.state['address']);
+    if (this.state['address'].length > 0) {
+      fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.state['address']}`, {
         method: 'GET',
         headers: {
-          Authorization: `KakaoAK ${config.KAKAO_KEY}`,
+          Authorization: `KakaoAK ${process.env.KAKAO_KEY}`,
         },
       })
         .then(res => res.json())
@@ -60,7 +60,7 @@ class Header extends Component {
     }
   };
 
-  // 경도와 위도로 찾기
+  // 경도와 위도로 주소 찾기
   getLocationAddress = () => {
     // console.log(this.state['longitude'], this.state['latitude']);
     fetch(
@@ -68,7 +68,7 @@ class Header extends Component {
       {
         method: 'GET',
         headers: {
-          Authorization: `KakaoAK ${config.KAKAO_KEY}`,
+          Authorization: `KakaoAK ${process.env.KAKAO_KEY}`,
         },
       },
     )
@@ -90,6 +90,7 @@ class Header extends Component {
           let longitude = position.coords.longitude;
           let latitude = position.coords.latitude;
           this.setState({ longitude, latitude });
+          this.setState({ location: true });
           this.getLocationAddress();
         },
         err => {
@@ -102,7 +103,7 @@ class Header extends Component {
         },
       );
     } else {
-      alert('GPS를 지원하지 않습니다.');
+      alert('현재 위치를 가져올 수 없습니다.');
     }
   };
 
@@ -121,28 +122,49 @@ class Header extends Component {
   render() {
     return (
       <>
-        <div style={{ textAlign: 'center', padding: '40px 100px 40px 120px' }}>
-          <Row justify="center" align="middle">
-            <Col flex={3} style={{ textAlign: 'left' }}>
+        <Layout
+          style={{
+            textAlign: 'center',
+            padding: '40px 100px 40px 120px',
+            backgroundColor: '#5FBEBB',
+          }}
+        >
+          <Row justify="space-around" align="middle">
+            <Col span={12} style={{ textAlign: 'left' }}>
               <Link to={'/'} style={{ marginRight: 30 }}></Link>
               <div style={{ display: 'inline' }}>
+                <Button
+                  onClick={this.getLocation}
+                  style={{
+                    backgroundColor: '#FFF',
+                    borderColor: 'white',
+                    height: 39,
+                    width: 39,
+                    marginRight: 5,
+                    verticalAlign: 'bottom',
+                  }}
+                  icon={
+                    <AimOutlined
+                      style={{ verticalAlign: 'middle', color: '#5FBEBB', fontSize: 20 }}
+                    />
+                  }
+                ></Button>
                 <Input
                   placeholder="건물명, 도로명, 지번으로 검색하세요."
                   suffix={
                     <a onClick={this.getAddress}>
                       <SearchOutlined
                         style={{
+                          verticalAlign: 'middle',
                           color: '#5FBEBB',
                           fontSize: 20,
-                          verticalAlign: '-webkit-baseline-middle',
                         }}
                       />
                     </a>
                   }
                   style={{ width: 330, height: 40 }}
-                  value={this.state['keyword']}
+                  value={this.state['address']}
                   onChange={this.setAddress}
-                  onClick={this.getAddress}
                 />
                 {this.state['visible'] && (
                   <ul style={{ border: 1, marginTop: 2, width: 330 }}>
@@ -153,7 +175,7 @@ class Header extends Component {
                 )}
               </div>
             </Col>
-            <Col flex={2}>
+            <Col span={12}>
               <div style={{ display: 'inline' }}>
                 <Link to={`${PAGE_PATHS.SIGNIN}`}>
                   <Button
@@ -161,7 +183,7 @@ class Header extends Component {
                       backgroundColor: '#5FBEBB',
                       borderColor: 'white',
                       height: 40,
-                      verticalAlign: 'top',
+                      verticalAlign: 'middle',
                     }}
                   >
                     <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
@@ -170,7 +192,7 @@ class Header extends Component {
               </div>
             </Col>
           </Row>
-        </div>
+        </Layout>
       </>
     );
   }

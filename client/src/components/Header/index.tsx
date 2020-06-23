@@ -100,7 +100,7 @@ class Header extends Component {
         },
       );
     } else {
-      alert('GPS를 지원하지 않습니다.');
+      alert('현재 위치를 가져올 수 없습니다.');
     }
   };
 

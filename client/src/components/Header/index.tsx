@@ -27,7 +27,6 @@ class Header extends Component {
   }
 
   componentWillMount() {
-    console.log(process.env.KAKAO_KEY);
     this.getLocation();
   }
 
@@ -35,27 +34,28 @@ class Header extends Component {
     this.setState({ address: e.target.value });
   };
 
-  pushAddrs = json => {
-    let tempAddr = [];
-    json.results.juso.map(addr => {
-      return tempAddr.push(addr.zipNo + ' ' + addr.roadAddr);
-    });
-    this.setState({ addressList: tempAddr });
-  };
-
   // 키워드로 주소 찾기
   getAddress = () => {
     // console.log(this.state['address']);
-    console.log(this.state['address']);
     if (this.state['address'].length > 0) {
-      fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.state['address']}`, {
+      fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${this.state['address']}`, {
         method: 'GET',
         headers: {
           Authorization: `KakaoAK ${process.env.KAKAO_KEY}`,
         },
       })
         .then(res => res.json())
-        .then(json => console.log(json))
+        .then(json => {
+          if (json.documents.length > 0) {
+            let addressList = [];
+            json.documents.map(address => {
+              // console.log(address);
+              addressList.push(address);
+            });
+            this.setState({ addressList });
+            this.setState({ visible: true });
+          }
+        })
         .catch(err => console.log(err));
     }
   };
@@ -76,7 +76,8 @@ class Header extends Component {
       .then(json => {
         // console.log(Object.keys(json));
         if (json.documents.length > 0) {
-          this.setState({ address: json.documents[0].address.address_name });
+          let address = json.documents[0].address.address_name;
+          this.setState({ address });
         }
       })
       .catch(err => console.log(err));
@@ -132,64 +133,63 @@ class Header extends Component {
           <Row justify="space-around" align="middle">
             <Col span={12} style={{ textAlign: 'left' }}>
               <Link to={'/'} style={{ marginRight: 30 }}></Link>
-              <div style={{ display: 'inline' }}>
-                <Button
-                  onClick={this.getLocation}
-                  style={{
-                    backgroundColor: '#FFF',
-                    borderColor: 'white',
-                    height: 39,
-                    width: 39,
-                    marginRight: 5,
-                    verticalAlign: 'bottom',
-                  }}
-                  icon={
-                    <AimOutlined
-                      style={{ verticalAlign: 'middle', color: '#5FBEBB', fontSize: 20 }}
+              {/* <div style={{ display: 'fixed', width: '100%' }}> */}
+              <Button
+                onClick={this.getLocation}
+                style={{
+                  display: 'inline',
+                  backgroundColor: '#FFF',
+                  borderColor: 'white',
+                  height: 39,
+                  width: 39,
+                  marginRight: 5,
+                  verticalAlign: 'bottom',
+                }}
+                icon={
+                  <AimOutlined
+                    style={{ verticalAlign: 'middle', color: '#5FBEBB', fontSize: 20 }}
+                  />
+                }
+              ></Button>
+              <Input
+                placeholder="건물명, 도로명, 지번으로 검색하세요."
+                suffix={
+                  <a onClick={this.getAddress}>
+                    <SearchOutlined
+                      style={{
+                        verticalAlign: 'middle',
+                        color: '#5FBEBB',
+                        fontSize: 20,
+                      }}
                     />
-                  }
-                ></Button>
-                <Input
-                  placeholder="건물명, 도로명, 지번으로 검색하세요."
-                  suffix={
-                    <a onClick={this.getAddress}>
-                      <SearchOutlined
-                        style={{
-                          verticalAlign: 'middle',
-                          color: '#5FBEBB',
-                          fontSize: 20,
-                        }}
-                      />
-                    </a>
-                  }
-                  style={{ width: 330, height: 40 }}
-                  value={this.state['address']}
-                  onChange={this.setAddress}
-                />
-                {this.state['visible'] && (
-                  <ul style={{ border: 1, marginTop: 2, width: 330 }}>
-                    <li>test1</li>
-                    <li>test2</li>
-                    {/* <AddressList list={addrs} /> */}
-                  </ul>
-                )}
-              </div>
+                  </a>
+                }
+                style={{ width: 330, height: 40 }}
+                value={this.state['address']}
+                onChange={this.setAddress}
+                onClick={this.setAddressListVisible}
+              />
+              {this.state['visible'] && (
+                <ul style={{ border: 1, marginTop: 2, width: 330 }}>
+                  <AddressList list={this.state['addressList']} />
+                </ul>
+              )}
             </Col>
             <Col span={12}>
-              <div style={{ display: 'inline' }}>
-                <Link to={`${PAGE_PATHS.SIGNIN}`}>
-                  <Button
-                    style={{
-                      backgroundColor: '#5FBEBB',
-                      borderColor: 'white',
-                      height: 40,
-                      verticalAlign: 'middle',
-                    }}
-                  >
-                    <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
-                  </Button>
-                </Link>
-              </div>
+              {/* <div style={{ display: 'block' }}> */}
+              <Link to={`${PAGE_PATHS.SIGNIN}`}>
+                <Button
+                  style={{
+                    backgroundColor: '#5FBEBB',
+                    borderColor: 'white',
+                    height: 40,
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
+                </Button>
+              </Link>
+              {/* </div> */}
             </Col>
           </Row>
         </Layout>

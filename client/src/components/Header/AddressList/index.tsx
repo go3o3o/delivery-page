@@ -29,18 +29,12 @@ export const AddressList = ({ list }) => {
   };
 
   const renderList = () => {
-    return display
-      ? list.map((d, i) => (
-          <li key={i} onClick={() => displayAddr(d)}>
-            {d}
-          </li>
-        ))
-      : null;
+    return display ? list.map((d, i) => <li key={i}>{d.place_name}</li>) : null;
   };
 
   return (
     <>
-      {renderAddr()}
+      {/* {renderAddr()} */}
       {renderList()}
     </>
   );

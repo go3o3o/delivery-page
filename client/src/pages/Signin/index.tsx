@@ -1,13 +1,17 @@
 import React, { useEffect, ChangeEvent } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import { Layout, Form, Input, Button, Checkbox } from 'antd';
+import { Layout, Divider, Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined, TranslationOutlined } from '@ant-design/icons';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 import Header from '../../components/Header';
+
+// @ts-ignore
+import Logo from '../../components/assets/logo.png';
 
 const { Content } = Layout;
 
@@ -17,10 +21,6 @@ interface InjectedProps {
 
 function Signin(props: InjectedProps & RouteComponentProps) {
   const { authStore, history } = props;
-
-  useEffect(() => {
-    authStore.resetPasswordAndEmail();
-  }, []);
 
   const onClickLogin = async (e: MouseEvent) => {
     e.preventDefault();
@@ -38,7 +38,8 @@ function Signin(props: InjectedProps & RouteComponentProps) {
   };
 
   const style = {
-    width: '50%',
+    display: 'inline-block',
+    width: '80%',
   };
 
   return (
@@ -54,40 +55,48 @@ function Signin(props: InjectedProps & RouteComponentProps) {
           style={{
             position: 'absolute',
             backgroundColor: '#FFF',
-            height: '400px',
+            borderRadius: 20,
+            height: 350,
             width: '30%',
             top: '50%',
             left: '50%',
             transform: `translate(-50%, -50%)`,
+            padding: 10,
           }}
         >
-          <Form.Item style={style}>
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Input
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-          <Form.Item>
-            <Button
-              style={{
-                backgroundColor: '#5FBEBB',
-                borderColor: 'white',
-                height: 40,
-              }}
-            >
-              <span style={{ color: 'white', fontSize: 20 }}> Log in</span>
-            </Button>
-          </Form.Item>
+          <div style={{ textAlign: 'center' }}>
+            <Link to={'/'}>
+              <img className="logo" alt="Delivery" width="250" src={Logo} />
+            </Link>
+
+            <Divider style={{ marginTop: 10 }} />
+            <Form.Item style={style}>
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Username"
+                style={{ height: 40 }}
+              />
+            </Form.Item>
+            <Form.Item style={style}>
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+                style={{ height: 40 }}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                style={{
+                  backgroundColor: '#5FBEBB',
+                  borderColor: 'white',
+                  height: 40,
+                }}
+              >
+                <span style={{ color: 'white', fontSize: 20 }}>LOGIN</span>
+              </Button>
+            </Form.Item>
+          </div>
         </div>
       </Content>
     </>

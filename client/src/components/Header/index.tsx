@@ -7,8 +7,9 @@ import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
-import { AddressList } from './AddressList';
-import { CodeNode } from 'source-list-map';
+
+// @ts-ignore
+import Logo from '../assets/logo2.png';
 
 // TO DO LIST
 // 1. DB에 음식점 정보 넣기
@@ -131,13 +132,17 @@ class Header extends Component {
         <Layout
           style={{
             textAlign: 'center',
-            padding: '40px 100px 40px 120px',
+            padding: '40px 80px 40px 120px',
             backgroundColor: '#5FBEBB',
           }}
         >
           <Row justify="space-around" align="middle">
+            <Col span={6} style={{ textAlign: 'left' }}>
+              <Link to={'/'}>
+                <img className="logo" alt="Delivery" width="250" src={Logo} />
+              </Link>
+            </Col>
             <Col span={12} style={{ textAlign: 'left' }}>
-              <Link to={'/'} style={{ marginRight: 30 }}></Link>
               <Button
                 onClick={this.getLocation}
                 style={{
@@ -184,7 +189,7 @@ class Header extends Component {
                 />
               )}
             </Col>
-            <Col span={12}>
+            <Col span={6}>
               <Link to={`${PAGE_PATHS.SIGNIN}`}>
                 <Button
                   style={{

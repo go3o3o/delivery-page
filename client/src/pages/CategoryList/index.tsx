@@ -5,6 +5,8 @@ import { Layout, Menu } from 'antd';
 import { PAGE_PATHS, STORES } from '../../constants';
 import Header from '../../components/Header';
 
+const { Content } = Layout;
+
 type InjectedProps = {
   [STORES.CATEGORY_STORE];
 };
@@ -13,12 +15,8 @@ class CategoryList extends Component {
   render() {
     return (
       <>
-        <Layout>
-          <div style={{ width: '100%', height: '100%', backgroundColor: '#5FBEBB' }}>
-            <Header />
-            <div>CategoryList</div>
-          </div>
-        </Layout>
+        <Header />
+        <Content style={{ backgroundColor: '#FFF' }}>CategoryList</Content>
       </>
     );
   }

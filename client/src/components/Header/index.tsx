@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { Layout, Input, Button, Row, Col } from 'antd';
+import { Layout, Input, Button, Row, Col, List } from 'antd';
 import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 import { AddressList } from './AddressList';
 import { CodeNode } from 'source-list-map';
+
+// TO DO LIST
+// 1. DB에 음식점 정보 넣기
+// 2. Login 페이지
+// 3. Sign up 페이지
 
 class Header extends Component {
   constructor(props) {
@@ -133,7 +138,6 @@ class Header extends Component {
           <Row justify="space-around" align="middle">
             <Col span={12} style={{ textAlign: 'left' }}>
               <Link to={'/'} style={{ marginRight: 30 }}></Link>
-              {/* <div style={{ display: 'fixed', width: '100%' }}> */}
               <Button
                 onClick={this.getLocation}
                 style={{
@@ -170,13 +174,17 @@ class Header extends Component {
                 onClick={this.setAddressListVisible}
               />
               {this.state['visible'] && (
-                <ul style={{ border: 1, marginTop: 2, width: 330 }}>
-                  <AddressList list={this.state['addressList']} />
-                </ul>
+                <List
+                  dataSource={this.state['addressList']}
+                  renderItem={(item: any) => (
+                    <List.Item key={item.id}>
+                      <List.Item.Meta title={item.place_name} description={item.address_name} />
+                    </List.Item>
+                  )}
+                />
               )}
             </Col>
             <Col span={12}>
-              {/* <div style={{ display: 'block' }}> */}
               <Link to={`${PAGE_PATHS.SIGNIN}`}>
                 <Button
                   style={{
@@ -189,7 +197,6 @@ class Header extends Component {
                   <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
                 </Button>
               </Link>
-              {/* </div> */}
             </Col>
           </Row>
         </Layout>

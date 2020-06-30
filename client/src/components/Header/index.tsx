@@ -205,6 +205,7 @@ class Header extends Component {
             </Col>
           </Row>
         </Layout>
+        <div style={{ backgroundColor: '#FFF', height: 5 }} />
       </>
     );
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, ChangeEvent } from 'react';
+import React, { useEffect, ChangeEvent, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -22,7 +22,7 @@ interface InjectedProps {
 function Signin(props: InjectedProps & RouteComponentProps) {
   const { authStore, history } = props;
 
-  const onClickLogin = async (e: MouseEvent) => {
+  const onClickLogin = async (e: any) => {
     e.preventDefault();
     e.stopPropagation();
     try {
@@ -31,10 +31,6 @@ function Signin(props: InjectedProps & RouteComponentProps) {
     } catch (err) {
       alert(err.response.data.msg);
     }
-  };
-
-  const onChangeEmail = (v: ChangeEvent<HTMLInputElement>) => {
-    authStore.setEmail(v.target.value);
   };
 
   const style = {
@@ -56,7 +52,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
             position: 'absolute',
             backgroundColor: '#FFF',
             borderRadius: 20,
-            height: 350,
+            height: 400,
             width: '30%',
             top: '50%',
             left: '50%',
@@ -92,10 +88,28 @@ function Signin(props: InjectedProps & RouteComponentProps) {
                   borderColor: 'white',
                   height: 40,
                 }}
+                onClick={onClickLogin}
               >
                 <span style={{ color: 'white', fontSize: 20 }}>LOGIN</span>
               </Button>
             </Form.Item>
+            <Form.Item>
+              처음이신가요?
+              <Link
+                to={PAGE_PATHS.SIGNUP}
+                style={{
+                  marginLeft: 5,
+                  color: '#5FBEBB',
+                  borderColor: 'white',
+                  fontWeight: 'bold',
+                  textDecoration: 'none',
+                  fontSize: 15,
+                }}
+              >
+                계정 만들기
+              </Link>
+            </Form.Item>
+            <div></div>
           </div>
         </div>
       </Content>

@@ -1,4 +1,4 @@
-import React, { useEffect, ChangeEvent } from 'react';
+import React, { useEffect, ChangeEvent, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { inject, observer } from 'mobx-react';
 
@@ -18,12 +18,11 @@ interface InjectedProps {
   [STORES.AUTH_STORE]: AuthStore;
 }
 
+// 이메일, 비밀번호, 닉네임
 function Signup(props: InjectedProps & RouteComponentProps) {
-  const { authStore, history } = props;
-
-  useEffect(() => {
-    authStore.resetPasswordAndEmail();
-  }, []);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
 
   return (
     <>
@@ -38,8 +37,8 @@ function Signup(props: InjectedProps & RouteComponentProps) {
           style={{
             position: 'absolute',
             backgroundColor: '#FFF',
-            height: '400px',
-            width: '30%',
+            height: 500,
+            width: '50%',
             top: '50%',
             left: '50%',
             transform: `translate(-50%, -50%)`,

@@ -9,6 +9,7 @@ import './css/style.css';
 
 import { PAGE_PATHS, STORES } from './constants';
 import Login from './pages/Signin';
+import Signup from './pages/Signup';
 import CategoryList from './pages/CategoryList';
 
 import 'antd/dist/antd.css';
@@ -24,6 +25,7 @@ export default class App extends Component {
           <Switch>
             <Route path={PAGE_PATHS.CATEGORY_LISTS} component={CategoryList} />
             <Route path={PAGE_PATHS.SIGNIN} component={Login} />
+            <Route path={PAGE_PATHS.SIGNUP} component={Signup} />
 
             <Route path={`${PAGE_PATHS.CATEGORY_LISTS}`} component={CategoryList} />
 

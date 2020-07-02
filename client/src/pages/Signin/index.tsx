@@ -15,12 +15,29 @@ import Logo from '../../components/assets/logo.png';
 
 const { Content } = Layout;
 
+const clientId = process.env.NAVER_CLIENT_ID;
+const callbackUrl = encodeURI(process.env.NAVER_CALLBACK_URL);
+const loginButton = { color: 'white', type: 1, height: 40 };
+
 interface InjectedProps {
   [STORES.AUTH_STORE]: AuthStore;
 }
 
 function Signin(props: InjectedProps & RouteComponentProps) {
   const { authStore, history } = props;
+
+  useEffect(Naver, []);
+
+  function Naver() {
+    const naverIdLogin = new window.naver.LoginWithNaverId({
+      clientId,
+      callbackUrl,
+      isPopup: true,
+      loginButton,
+    });
+
+    naverIdLogin.init();
+  }
 
   const onClickLogin = async (e: any) => {
     e.preventDefault();
@@ -50,17 +67,21 @@ function Signin(props: InjectedProps & RouteComponentProps) {
         <div
           style={{
             position: 'absolute',
-            backgroundColor: '#FFF',
-            borderRadius: 20,
-            height: 400,
             width: '30%',
             top: '50%',
             left: '50%',
             transform: `translate(-50%, -50%)`,
-            padding: 10,
           }}
         >
-          <div style={{ textAlign: 'center' }}>
+          <div
+            style={{
+              textAlign: 'center',
+              backgroundColor: '#FFF',
+              borderRadius: 20,
+              height: 400,
+              padding: 10,
+            }}
+          >
             <Link to={'/'}>
               <img className="logo" alt="Delivery" width="250" src={Logo} />
             </Link>
@@ -109,8 +130,8 @@ function Signin(props: InjectedProps & RouteComponentProps) {
                 계정 만들기
               </Link>
             </Form.Item>
-            <div></div>
           </div>
+          <div id="naverIdLogin" style={{ margin: 5, textAlign: 'center' }}></div>
         </div>
       </Content>
     </>

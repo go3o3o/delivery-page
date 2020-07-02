@@ -1,4 +1,4 @@
-import React, { useEffect, ChangeEvent, useState } from 'react';
+import React, { useEffect, ChangeEvent, useState, CSSProperties } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -15,9 +15,11 @@ import Logo from '../../components/assets/logo.png';
 
 const { Content } = Layout;
 
-const clientId = process.env.NAVER_CLIENT_ID;
-const callbackUrl = encodeURI(process.env.NAVER_CALLBACK_URL);
-const loginButton = { color: 'white', type: 1, height: 40 };
+const naverClientId = process.env.NAVER_CLIENT_ID;
+const naverCallbackUrl = encodeURI(process.env.NAVER_CALLBACK_URL);
+const naverLoginButton = { color: 'white', type: 1, height: 45 };
+
+const kakaoAccessKey = process.env.KAKAO_KEY;
 
 interface InjectedProps {
   [STORES.AUTH_STORE]: AuthStore;
@@ -26,17 +28,29 @@ interface InjectedProps {
 function Signin(props: InjectedProps & RouteComponentProps) {
   const { authStore, history } = props;
 
-  useEffect(Naver, []);
+  useEffect(() => {
+    Naver();
+    Kakao();
+  }, []);
 
   function Naver() {
     const naverIdLogin = new window.naver.LoginWithNaverId({
-      clientId,
-      callbackUrl,
+      clientId: naverClientId,
+      callbackUrl: naverCallbackUrl,
       isPopup: true,
-      loginButton,
+      loginButton: naverLoginButton,
     });
 
     naverIdLogin.init();
+  }
+
+  function Kakao() {
+    new window.Kakao.init(kakaoAccessKey);
+    new window.Kakao.Auth.createLoginButton({
+      container: '#kakaoIdLogin',
+      lang: 'en',
+      size: 'small',
+    });
   }
 
   const onClickLogin = async (e: any) => {
@@ -53,6 +67,12 @@ function Signin(props: InjectedProps & RouteComponentProps) {
   const style = {
     display: 'inline-block',
     width: '80%',
+  };
+
+  const buttonStyle: CSSProperties = {
+    margin: 5,
+    textAlign: 'center',
+    display: 'inline-block',
   };
 
   return (
@@ -131,7 +151,8 @@ function Signin(props: InjectedProps & RouteComponentProps) {
               </Link>
             </Form.Item>
           </div>
-          <div id="naverIdLogin" style={{ margin: 5, textAlign: 'center' }}></div>
+          <div id="naverIdLogin" style={buttonStyle}></div>
+          <div id="kakaoIdLogin" style={buttonStyle}></div>
         </div>
       </Content>
     </>

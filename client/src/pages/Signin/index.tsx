@@ -17,7 +17,7 @@ const { Content } = Layout;
 
 const naverClientId = process.env.NAVER_CLIENT_ID;
 const naverCallbackUrl = encodeURI(process.env.NAVER_CALLBACK_URL);
-const naverLoginButton = { color: 'white', type: 1, height: 45 };
+const naverLoginButton = { color: 'green', type: 3, height: 50 };
 
 const kakaoAccessKey = process.env.KAKAO_KEY;
 
@@ -48,8 +48,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
     new window.Kakao.init(kakaoAccessKey);
     new window.Kakao.Auth.createLoginButton({
       container: '#kakaoIdLogin',
-      lang: 'en',
-      size: 'small',
+      // size: 'small',
     });
   }
 
@@ -64,7 +63,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
     }
   };
 
-  const style = {
+  const formItemStyle = {
     display: 'inline-block',
     width: '80%',
   };
@@ -77,17 +76,18 @@ function Signin(props: InjectedProps & RouteComponentProps) {
 
   return (
     <>
+      <Header />
       <Content
         style={{
           backgroundColor: '#5FBEBB',
-          height: '100vh',
+          height: '80vh',
           position: 'relative',
         }}
       >
         <div
           style={{
             position: 'absolute',
-            width: '30%',
+            width: '80%',
             top: '50%',
             left: '50%',
             transform: `translate(-50%, -50%)`,
@@ -98,7 +98,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
               textAlign: 'center',
               backgroundColor: '#FFF',
               borderRadius: 20,
-              height: 400,
+              height: 460,
               padding: 10,
             }}
           >
@@ -107,18 +107,18 @@ function Signin(props: InjectedProps & RouteComponentProps) {
             </Link>
 
             <Divider style={{ marginTop: 10 }} />
-            <Form.Item style={style}>
+            <Form.Item style={formItemStyle}>
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
+                placeholder="E-MAIL"
                 style={{ height: 40 }}
               />
             </Form.Item>
-            <Form.Item style={style}>
+            <Form.Item style={formItemStyle}>
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="Password"
+                placeholder="PASSWORD"
                 style={{ height: 40 }}
               />
             </Form.Item>
@@ -127,12 +127,16 @@ function Signin(props: InjectedProps & RouteComponentProps) {
                 style={{
                   backgroundColor: '#5FBEBB',
                   borderColor: 'white',
-                  height: 40,
+                  marginBottom: 20,
+                  height: 50,
+                  width: '80%',
                 }}
                 onClick={onClickLogin}
               >
                 <span style={{ color: 'white', fontSize: 20 }}>LOGIN</span>
               </Button>
+              <div id="naverIdLogin" style={buttonStyle}></div>
+              <div id="kakaoIdLogin" style={buttonStyle}></div>
             </Form.Item>
             <Form.Item>
               처음이신가요?
@@ -141,7 +145,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
                 style={{
                   marginLeft: 5,
                   color: '#5FBEBB',
-                  borderColor: 'white',
+                  // borderColor: 'white',
                   fontWeight: 'bold',
                   textDecoration: 'none',
                   fontSize: 15,
@@ -151,8 +155,6 @@ function Signin(props: InjectedProps & RouteComponentProps) {
               </Link>
             </Form.Item>
           </div>
-          <div id="naverIdLogin" style={buttonStyle}></div>
-          <div id="kakaoIdLogin" style={buttonStyle}></div>
         </div>
       </Content>
     </>

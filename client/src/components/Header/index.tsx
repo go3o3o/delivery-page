@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { Layout, Input, Button, Row, Col, List } from 'antd';
+import { Layout, Input, Button, Row, Col, List, Space } from 'antd';
 import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { PAGE_PATHS, STORES } from '../../constants';
@@ -132,17 +132,15 @@ class Header extends Component {
         <Layout
           style={{
             textAlign: 'center',
-            padding: '40px 80px 40px 120px',
+            padding: '40px 80px 40px 80px',
             backgroundColor: '#5FBEBB',
           }}
         >
-          <Row justify="space-around" align="middle">
-            <Col span={6} style={{ textAlign: 'left' }}>
-              <Link to={'/'}>
-                <img className="logo" alt="Delivery" width="250" src={Logo} />
-              </Link>
-            </Col>
-            <Col span={12} style={{ textAlign: 'left' }}>
+          <Space size={80} align="center">
+            <Link to={'/'}>
+              <img className="logo" alt="Delivery" width="250" src={Logo} />
+            </Link>
+            <div style={{ width: 400 }}>
               <Button
                 onClick={this.getLocation}
                 style={{
@@ -178,32 +176,30 @@ class Header extends Component {
                 onChange={this.setAddress}
                 onClick={this.setAddressListVisible}
               />
-              {this.state['visible'] && (
-                <List
-                  dataSource={this.state['addressList']}
-                  renderItem={(item: any) => (
-                    <List.Item key={item.id}>
-                      <List.Item.Meta title={item.place_name} description={item.address_name} />
-                    </List.Item>
-                  )}
-                />
-              )}
-            </Col>
-            <Col span={6}>
-              <Link to={`${PAGE_PATHS.SIGNIN}`}>
-                <Button
-                  style={{
-                    backgroundColor: '#5FBEBB',
-                    borderColor: 'white',
-                    height: 40,
-                    verticalAlign: 'middle',
-                  }}
-                >
-                  <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
-                </Button>
-              </Link>
-            </Col>
-          </Row>
+            </div>
+            {this.state['visible'] && (
+              <List
+                dataSource={this.state['addressList']}
+                renderItem={(item: any) => (
+                  <List.Item key={item.id}>
+                    <List.Item.Meta title={item.place_name} description={item.address_name} />
+                  </List.Item>
+                )}
+              />
+            )}
+            <Link to={`${PAGE_PATHS.SIGNIN}`}>
+              <Button
+                style={{
+                  backgroundColor: '#5FBEBB',
+                  borderColor: 'white',
+                  height: 40,
+                  verticalAlign: 'middle',
+                }}
+              >
+                <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
+              </Button>
+            </Link>
+          </Space>
         </Layout>
         <div style={{ backgroundColor: '#FFF', height: 5 }} />
       </>

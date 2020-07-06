@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
+import { IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -16,14 +17,14 @@ import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+import { Layout, Divider } from 'antd';
+
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 import Header from '../../components/Header';
 
 // @ts-ignore
 import Logo from '../../components/assets/logo.png';
-import { IconButton } from '@material-ui/core';
-import { CodeNode } from 'source-list-map';
 
 const { Content } = Layout;
 
@@ -43,7 +44,7 @@ interface InjectedProps {
 }
 
 // 이메일, 비밀번호, 닉네임
-function Signup(props: InjectedProps & RouteComponentProps & Form) {
+function Signup(props: InjectedProps & RouteComponentProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -71,13 +72,6 @@ function Signup(props: InjectedProps & RouteComponentProps & Form) {
   const onChangePasswordValue = event => {
     const value = event.target.value;
     setPassword(value);
-  };
-
-  const [form] = Form.useForm();
-
-  const formItemStyle = {
-    display: 'inline-block',
-    width: '80%',
   };
 
   return (

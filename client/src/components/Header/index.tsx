@@ -11,11 +11,6 @@ import AuthStore from '../../stores/auth/AuthStore';
 // @ts-ignore
 import Logo from '../assets/logo2.png';
 
-// TO DO LIST
-// 1. DB에 음식점 정보 넣기
-// 2. Login 페이지
-// 3. Sign up 페이지
-
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -28,8 +23,11 @@ class Header extends Component {
       addressList: [],
     };
 
-    this.getLocation = this.getLocation.bind(this);
+    this.getAddress = this.getAddress.bind(this);
     this.setAddress = this.setAddress.bind(this);
+    this.getLocation = this.getLocation.bind(this);
+    this.getLocationAddress = this.getLocationAddress.bind(this);
+    this.onClickAddress = this.onClickAddress.bind(this);
   }
 
   componentWillMount() {
@@ -126,80 +124,116 @@ class Header extends Component {
     this.setState({ visible: false });
   };
 
+  onClickAddress = item => {
+    this.setState({ address: item.address_name });
+    this.setState({ visible: false });
+  };
+
+  toggleEnter = e => {
+    let target = e.target;
+    if (target.id == 'listItem') {
+      target.style.background = '#5FBEBB';
+    }
+  };
+  toggleLeave = e => {
+    let target = e.target;
+    if (target.id == 'listItem') {
+      target.style.background = '#FFF';
+    }
+  };
+
   render() {
     return (
       <>
         <Layout
           style={{
-            textAlign: 'center',
             padding: '40px 80px 40px 80px',
             backgroundColor: '#5FBEBB',
           }}
         >
-          <Space size={80} align="center">
-            <Link to={'/'}>
-              <img className="logo" alt="Delivery" width="250" src={Logo} />
-            </Link>
-            <div style={{ width: 400 }}>
-              <Button
-                onClick={this.getLocation}
-                style={{
-                  display: 'inline',
-                  backgroundColor: '#FFF',
-                  borderColor: 'white',
-                  height: 39,
-                  width: 39,
-                  marginRight: 5,
-                  verticalAlign: 'bottom',
-                }}
-                icon={
-                  <AimOutlined
-                    style={{ verticalAlign: 'middle', color: '#5FBEBB', fontSize: 20 }}
-                  />
-                }
-              ></Button>
-              <Input
-                placeholder="건물명, 도로명, 지번으로 검색하세요."
-                suffix={
-                  <a onClick={this.getAddress}>
-                    <SearchOutlined
-                      style={{
-                        verticalAlign: 'middle',
-                        color: '#5FBEBB',
-                        fontSize: 20,
-                      }}
+          <Row justify="center">
+            <Space size={80} align="center">
+              <Link to={'/'}>
+                <img className="logo" alt="Delivery" width="250" src={Logo} />
+              </Link>
+              <div style={{ width: 550 }}>
+                <Button
+                  onClick={this.getLocation}
+                  style={{
+                    display: 'inline',
+                    backgroundColor: '#FFF',
+                    borderColor: 'white',
+                    height: 39,
+                    width: 39,
+                    marginRight: 5,
+                    verticalAlign: 'bottom',
+                  }}
+                  icon={
+                    <AimOutlined
+                      style={{ verticalAlign: 'middle', color: '#5FBEBB', fontSize: 20 }}
                     />
-                  </a>
-                }
-                style={{ width: 330, height: 40 }}
-                value={this.state['address']}
-                onChange={this.setAddress}
-                onClick={this.setAddressListVisible}
-              />
-            </div>
-            {this.state['visible'] && (
-              <List
-                dataSource={this.state['addressList']}
-                renderItem={(item: any) => (
-                  <List.Item key={item.id}>
-                    <List.Item.Meta title={item.place_name} description={item.address_name} />
-                  </List.Item>
-                )}
-              />
-            )}
-            <Link to={`${PAGE_PATHS.SIGNIN}`}>
-              <Button
-                style={{
-                  backgroundColor: '#5FBEBB',
-                  borderColor: 'white',
-                  height: 40,
-                  verticalAlign: 'middle',
-                }}
-              >
-                <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
-              </Button>
-            </Link>
-          </Space>
+                  }
+                ></Button>
+                <Input
+                  placeholder="건물명, 도로명, 지번으로 검색하세요."
+                  suffix={
+                    <a onClick={this.getAddress}>
+                      <SearchOutlined
+                        style={{
+                          verticalAlign: 'middle',
+                          color: '#5FBEBB',
+                          fontSize: 20,
+                        }}
+                      />
+                    </a>
+                  }
+                  style={{ width: 500, height: 40 }}
+                  value={this.state['address']}
+                  onChange={this.setAddress}
+                  onClick={this.setAddressListVisible}
+                />
+                <div
+                  className="demo-infinite-container"
+                  style={{ position: 'absolute', marginLeft: 43, width: 500 }}
+                >
+                  {this.state['visible'] && (
+                    <List
+                      header={<span>Header</span>}
+                      footer={<span>Footer</span>}
+                      bordered
+                      dataSource={this.state['addressList']}
+                      renderItem={(item: any) => (
+                        <List.Item
+                          key={item.id}
+                          className={item.id}
+                          onClick={() => this.onClickAddress(item)}
+                          id="listItem"
+                          onMouseEnter={this.toggleEnter}
+                          onMouseLeave={this.toggleLeave}
+                        >
+                          <List.Item.Meta title={item.place_name} description={item.address_name} />
+                        </List.Item>
+                      )}
+                      style={{ backgroundColor: '#FFF' }}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <Link to={`${PAGE_PATHS.SIGNIN}`}>
+                <Button
+                  style={{
+                    backgroundColor: '#5FBEBB',
+                    borderColor: 'white',
+                    height: 40,
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
+                </Button>
+              </Link>
+            </Space>
+          </Row>
         </Layout>
         <div style={{ backgroundColor: '#FFF', height: 5 }} />
       </>

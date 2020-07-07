@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import { IconButton } from '@material-ui/core';
+import { IconButton, FormHelperText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -16,8 +16,9 @@ import Lock from '@material-ui/icons/Lock';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import LocalDiningIcon from '@material-ui/icons/LocalDining';
 
-import { Layout, Divider } from 'antd';
+import { Layout, Divider, Button } from 'antd';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
@@ -40,17 +41,49 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface InjectedProps {
-  [STORES.AUTH_STORE]: AuthStore;
+  authStore: AuthStore;
 }
 
 // 이메일, 비밀번호, 닉네임
 function Signup(props: InjectedProps & RouteComponentProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [checkConformPassword, setCheckConfirmPassword] = useState(true);
 
+  const [helperText, setHelperText] = useState('');
+
   const classes = useStyles();
+
+  const handleSignup = async (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (password.length < 5) {
+      setHelperText('비밀번호는 5글자 이상 해주세요.');
+      return false;
+    }
+
+    const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    if (!emailRule.test(email)) {
+      setHelperText('이메일 양식이 아닙니다.');
+      return false;
+    }
+
+    try {
+      // const result = await props.authStore.signup({
+      //   email: email,
+      //   password: password,
+      //   phone_number: phoneNumber,
+      //   nickname: nickname,
+      // });
+    } catch (err) {
+      console.log(err.response.data.msg);
+    }
+    return false;
+  };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -60,16 +93,35 @@ function Signup(props: InjectedProps & RouteComponentProps) {
     event.preventDefault();
   };
 
-  const onChangeConfirmPasswordValue = event => {
+  const onChangeEmailValue = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    if (!emailRule.test(value)) {
+      setHelperText('이메일 양식이 아닙니다.');
+    } else {
+      setHelperText('');
+    }
+    setEmail(value);
+  };
+
+  const onChangeConfirmPasswordValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (value === password) {
       setCheckConfirmPassword(false);
+      setHelperText('비밀번호가 다릅니다.');
     } else {
       setCheckConfirmPassword(true);
+      setHelperText('');
     }
+    setRePassword(value);
   };
 
-  const onChangePasswordValue = event => {
+  const onChangeNickname = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setNickname(value);
+  };
+
+  const onChangePasswordValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setPassword(value);
   };
@@ -113,7 +165,14 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                   <AccountCircle />
                 </Grid>
                 <Grid item xs={11}>
-                  <TextField fullWidth id="standard-adornment-email" label="E-MAIL" />
+                  <TextField
+                    fullWidth
+                    id="standard-adornment-email"
+                    label="E-MAIL"
+                    value={email}
+                    onChange={onChangeEmailValue}
+                    helperText={helperText}
+                  />
                 </Grid>
               </Grid>
               <Grid container xs={12} alignItems="flex-end">
@@ -126,7 +185,6 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                     <Input
                       id="standard-adornment-password"
                       type={showPassword ? 'text' : 'password'}
-                      value={password}
                       onChange={onChangePasswordValue}
                       endAdornment={
                         <InputAdornment position="end">
@@ -139,7 +197,9 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                           </IconButton>
                         </InputAdornment>
                       }
+                      value={password}
                     />
+                    <FormHelperText id="component-error-text">{helperText}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid item xs={1}>
@@ -166,9 +226,39 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                       }
                       onChange={onChangeConfirmPasswordValue}
                       error={checkConformPassword}
+                      value={rePassword}
                     />
+                    <FormHelperText id="component-error-text">{helperText}</FormHelperText>
                   </FormControl>
                 </Grid>
+              </Grid>
+              <Grid container xs={12} alignItems="flex-end">
+                <Grid item xs={1}>
+                  <LocalDiningIcon />
+                </Grid>
+                <Grid item xs={11}>
+                  <TextField
+                    fullWidth
+                    id="standard-adornment-nickname"
+                    label="NICKNAME"
+                    value={nickname}
+                    onChange={onChangeNickname}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container xs={12} alignItems="flex-end">
+                <Button
+                  style={{
+                    backgroundColor: '#5FBEBB',
+                    borderColor: 'white',
+                    marginTop: 20,
+                    height: 50,
+                    width: '100%',
+                  }}
+                  // onClick={onClickLogin}
+                >
+                  <span style={{ color: 'white', fontSize: 20 }}>SIGNUP</span>
+                </Button>
               </Grid>
             </div>
           </div>

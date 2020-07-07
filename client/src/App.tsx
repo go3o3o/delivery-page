@@ -4,15 +4,13 @@ import { inject, observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
 import { Layout } from 'antd';
 
-import 'antd/dist/antd.css';
 import './css/style.css';
+import 'antd/dist/antd.css';
 
 import { PAGE_PATHS, STORES } from './constants';
 import Login from './pages/Signin';
 import Signup from './pages/Signup';
 import CategoryList from './pages/CategoryList';
-
-import 'antd/dist/antd.css';
 
 @inject(STORES.AUTH_STORE)
 @observer

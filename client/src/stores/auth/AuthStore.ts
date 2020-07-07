@@ -1,7 +1,7 @@
 import { action, observable, reaction } from 'mobx';
 import autobind from 'autobind-decorator';
 import * as jwt_decode from 'jwt-decode';
-import AuthService, { LoginSignupRequestDto } from '../../services/AuthService';
+import AuthService, { LoginRequestDto, SignupRequestDto } from '../../services/AuthService';
 
 export type Auth = {
   email: string;
@@ -14,6 +14,7 @@ class AuthStore {
   @observable auth: Auth | undefined;
   @observable email = '';
   @observable password = '';
+  @observable nickname = '';
   private authService = new AuthService();
 
   constructor() {
@@ -36,7 +37,7 @@ class AuthStore {
 
   @action
   async login() {
-    const body: LoginSignupRequestDto = {
+    const body: LoginRequestDto = {
       email: this.email,
       password: this.password,
     };
@@ -45,7 +46,7 @@ class AuthStore {
   }
 
   @action
-  async signup(auth: LoginSignupRequestDto) {
+  async signup(auth: SignupRequestDto) {
     return await this.authService.signup(auth);
   }
 

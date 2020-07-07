@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "1.0.0",
-  "description": "배달의 민족 웹사이트 - client",
+  "description": "배달 웹페이지 - client",
   "main": "index.js",
   "author": "yonikim",
   "license": "MIT",

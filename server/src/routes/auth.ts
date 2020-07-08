@@ -6,30 +6,8 @@ import { Member } from '../entities/Member';
 
 const router = express.Router();
 
-const isValidEmail = (email: string) => {
-  const regex = new RegExp(
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-  );
-
-  return regex.test(email);
-};
-
-const checkEmailPw = (email: string, pw: string) => {
-  if (!email || !pw) {
-    return { msg: '이메일 또는 비밀번호를 넣어주세요.' };
-  }
-  if (!isValidEmail(email)) {
-    return { msg: '이메일 양식에 맞게 넣어주세요.' };
-  }
-};
-
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const error = checkEmailPw(email, password);
-
-  if (error) {
-    return res.status(400).send(error);
-  }
 
   const user = await Member.findOne({ where: { email } });
 
@@ -47,13 +25,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-  const { email, password } = req.body;
-
-  const error = checkEmailPw(email, password);
-
-  if (error) {
-    return res.status(400).send(error);
-  }
+  const { email, password, phone_number, nickname } = req.body;
 
   const user = await Member.findOne({
     where: { email },
@@ -63,7 +35,7 @@ router.post('/signup', async (req, res) => {
     return res.status(400).json({ msg: '이미 등록된 이메일 입니다.' });
   }
 
-  const createdUser = await Member.create({ email, password });
+  const createdUser = await Member.create({ email, password, phone_number, nickname });
 
   return res.json({
     data: { seq: createdUser.seq },

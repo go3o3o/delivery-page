@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { Layout, Input, Button, Row, Col, List, Space } from 'antd';
 import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
+import Grid from '@material-ui/core/Grid';
+
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
 
@@ -149,92 +151,92 @@ class Header extends Component {
           style={{
             padding: '40px 80px 40px 80px',
             backgroundColor: '#5FBEBB',
+            minWidth: 850,
           }}
         >
-          <Row justify="center">
-            <Space size={80} align="center">
-              <Link to={'/'}>
-                <img className="logo" alt="Delivery" width="250" src={Logo} />
-              </Link>
-              <div style={{ width: 550 }}>
-                <Button
-                  onClick={this.getLocation}
-                  style={{
-                    display: 'inline',
-                    backgroundColor: '#FFF',
-                    borderColor: 'white',
-                    height: 39,
-                    width: 39,
-                    marginRight: 5,
-                    verticalAlign: 'bottom',
-                  }}
-                  icon={
-                    <AimOutlined
-                      style={{ verticalAlign: 'middle', color: '#5FBEBB', fontSize: 20 }}
+          <Grid container justify="space-around" alignItems="center">
+            <Link to={'/'}>
+              <img className="logo" alt="Delivery" width="250" src={Logo} />
+            </Link>
+            <div style={{ width: 500 }}>
+              <Button
+                onClick={this.getLocation}
+                style={{
+                  display: 'inline',
+                  backgroundColor: '#FFF',
+                  borderColor: 'white',
+                  height: 39,
+                  width: 39,
+                  marginRight: 5,
+                  verticalAlign: 'bottom',
+                }}
+                icon={
+                  <AimOutlined
+                    style={{ verticalAlign: 'middle', color: '#5FBEBB', fontSize: 20 }}
+                  />
+                }
+              ></Button>
+              <Input
+                placeholder="건물명, 도로명, 지번으로 검색하세요."
+                suffix={
+                  <a onClick={this.getAddress}>
+                    <SearchOutlined
+                      style={{
+                        verticalAlign: 'middle',
+                        color: '#5FBEBB',
+                        fontSize: 20,
+                      }}
                     />
-                  }
-                ></Button>
-                <Input
-                  placeholder="건물명, 도로명, 지번으로 검색하세요."
-                  suffix={
-                    <a onClick={this.getAddress}>
-                      <SearchOutlined
-                        style={{
-                          verticalAlign: 'middle',
-                          color: '#5FBEBB',
-                          fontSize: 20,
-                        }}
-                      />
-                    </a>
-                  }
-                  style={{ width: 500, height: 40 }}
-                  value={this.state['address']}
-                  onChange={this.setAddress}
-                  onClick={this.setAddressListVisible}
-                />
-                <div
-                  className="demo-infinite-container"
-                  style={{ position: 'absolute', marginLeft: 43, width: 500 }}
-                >
-                  {this.state['visible'] && (
-                    <List
-                      header={<span>Header</span>}
-                      footer={<span>Footer</span>}
-                      bordered
-                      dataSource={this.state['addressList']}
-                      renderItem={(item: any) => (
-                        <List.Item
-                          key={item.id}
-                          className={item.id}
-                          onClick={() => this.onClickAddress(item)}
-                          id="listItem"
-                          onMouseEnter={this.toggleEnter}
-                          onMouseLeave={this.toggleLeave}
-                        >
-                          <List.Item.Meta title={item.place_name} description={item.address_name} />
-                        </List.Item>
-                      )}
-                      style={{ backgroundColor: '#FFF' }}
-                    />
-                  )}
-                </div>
+                  </a>
+                }
+                style={{ width: 450, height: 40 }}
+                value={this.state['address']}
+                onChange={this.setAddress}
+                onClick={this.setAddressListVisible}
+              />
+              <div
+                className="demo-infinite-container"
+                style={{ position: 'absolute', marginLeft: 43, width: 450 }}
+              >
+                {this.state['visible'] && (
+                  <List
+                    header={<span>Header</span>}
+                    footer={<span>Footer</span>}
+                    bordered
+                    dataSource={this.state['addressList']}
+                    renderItem={(item: any) => (
+                      <List.Item
+                        key={item.id}
+                        className={item.id}
+                        onClick={() => this.onClickAddress(item)}
+                        id="listItem"
+                        onMouseEnter={this.toggleEnter}
+                        onMouseLeave={this.toggleLeave}
+                      >
+                        <List.Item.Meta title={item.place_name} description={item.address_name} />
+                      </List.Item>
+                    )}
+                    style={{ backgroundColor: '#FFF' }}
+                  />
+                )}
               </div>
+            </div>
 
-              <Link to={`${PAGE_PATHS.SIGNIN}`}>
-                <Button
-                  style={{
-                    backgroundColor: '#5FBEBB',
-                    borderColor: 'white',
-                    height: 40,
-                    verticalAlign: 'middle',
-                  }}
-                >
-                  <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
-                </Button>
-              </Link>
-            </Space>
-          </Row>
+            <Link to={`${PAGE_PATHS.SIGNIN}`}>
+              <Button
+                style={{
+                  backgroundColor: '#5FBEBB',
+                  borderColor: 'white',
+                  height: 40,
+                  verticalAlign: 'middle',
+                }}
+              >
+                <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
+              </Button>
+            </Link>
+          </Grid>
         </Layout>
+
         <div style={{ backgroundColor: '#FFF', height: 5 }} />
       </>
     );

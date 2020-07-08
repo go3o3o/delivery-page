@@ -17,6 +17,7 @@ import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import LocalDiningIcon from '@material-ui/icons/LocalDining';
+import AddIcCallIcon from '@material-ui/icons/AddIcCall';
 
 import { Layout, Divider, Button } from 'antd';
 
@@ -33,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   margin: {
     margin: theme.spacing(1),
   },
-  textField: {
+  grids: {
     margin: theme.spacing(1),
     display: 'inline-block',
     width: '80%',
@@ -44,7 +45,6 @@ interface InjectedProps {
   authStore: AuthStore;
 }
 
-// 이메일, 비밀번호, 닉네임
 function Signup(props: InjectedProps & RouteComponentProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,33 +52,34 @@ function Signup(props: InjectedProps & RouteComponentProps) {
   const [nickname, setNickname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [checkConformPassword, setCheckConfirmPassword] = useState(true);
+  const [checkConfirmPassword, setCheckConfirmPassword] = useState(true);
 
-  const [helperText, setHelperText] = useState('');
+  const [emailText, setEmailText] = useState('');
+  const [passwordText, setPasswordText] = useState('');
+  const [rePasswordText, setRePasswordText] = useState('');
+  const [checkPhoneNumber, setCheckPhoneNumber] = useState(true);
 
   const classes = useStyles();
 
-  const handleSignup = async (e: MouseEvent) => {
+  const handleSignup = async e => {
     e.preventDefault();
     e.stopPropagation();
-    if (password.length < 5) {
-      setHelperText('비밀번호는 5글자 이상 해주세요.');
+
+    if (checkConfirmPassword) {
       return false;
     }
-
-    const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    if (!emailRule.test(email)) {
-      setHelperText('이메일 양식이 아닙니다.');
+    if (checkPhoneNumber) {
       return false;
     }
 
     try {
-      // const result = await props.authStore.signup({
-      //   email: email,
-      //   password: password,
-      //   phone_number: phoneNumber,
-      //   nickname: nickname,
-      // });
+      const result = await props.authStore.signup({
+        email: email,
+        password: password,
+        phone_number: phoneNumber,
+        nickname: nickname,
+      });
+      alert(result.data.msg);
     } catch (err) {
       console.log(err.response.data.msg);
     }
@@ -97,21 +98,21 @@ function Signup(props: InjectedProps & RouteComponentProps) {
     const value = event.target.value;
     const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (!emailRule.test(value)) {
-      setHelperText('이메일 양식이 아닙니다.');
+      setEmailText('이메일 양식이 아닙니다.');
     } else {
-      setHelperText('');
+      setEmailText('');
     }
     setEmail(value);
   };
 
   const onChangeConfirmPasswordValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    if (value === password) {
-      setCheckConfirmPassword(false);
-      setHelperText('비밀번호가 다릅니다.');
-    } else {
+    if (value !== password) {
       setCheckConfirmPassword(true);
-      setHelperText('');
+      setRePasswordText('비밀번호가 다릅니다.');
+    } else {
+      setCheckConfirmPassword(false);
+      setRePasswordText('');
     }
     setRePassword(value);
   };
@@ -121,8 +122,25 @@ function Signup(props: InjectedProps & RouteComponentProps) {
     setNickname(value);
   };
 
+  const onChangePhoneNumber = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    let phoneNumberRule = /^\d{3}\d{3,4}\d{4}$/;
+
+    if (phoneNumberRule.test(value)) {
+      setCheckPhoneNumber(false);
+    } else {
+      setCheckPhoneNumber(true);
+    }
+    setPhoneNumber(value);
+  };
+
   const onChangePasswordValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+    if (value.length < 5) {
+      setPasswordText('비밀번호는 5글자 이상 해주세요.');
+    } else {
+      setPasswordText('');
+    }
     setPassword(value);
   };
 
@@ -132,7 +150,7 @@ function Signup(props: InjectedProps & RouteComponentProps) {
       <Content
         style={{
           backgroundColor: '#5FBEBB',
-          height: '80vh',
+          height: '100vh',
           position: 'relative',
         }}
       >
@@ -150,7 +168,8 @@ function Signup(props: InjectedProps & RouteComponentProps) {
               textAlign: 'center',
               backgroundColor: '#FFF',
               borderRadius: 20,
-              height: 450,
+              marginTop: 20,
+              height: 550,
               padding: 10,
             }}
           >
@@ -159,8 +178,8 @@ function Signup(props: InjectedProps & RouteComponentProps) {
             </Link>
 
             <Divider style={{ marginTop: 10 }} />
-            <div className={classes.textField}>
-              <Grid container xs={12} alignItems="flex-end">
+            <div className={classes.grids}>
+              <Grid container item xs={12} justify="center" alignItems="flex-end">
                 <Grid item xs={1}>
                   <AccountCircle />
                 </Grid>
@@ -171,15 +190,21 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                     label="E-MAIL"
                     value={email}
                     onChange={onChangeEmailValue}
-                    helperText={helperText}
                   />
                 </Grid>
               </Grid>
-              <Grid container xs={12} alignItems="flex-end">
+              <Grid container item xs={12} style={{ marginBottom: 10 }}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={11} style={{ textAlign: 'left' }}>
+                  <span style={{ color: 'red' }}>{emailText}</span>
+                </Grid>
+              </Grid>
+
+              <Grid container item xs={12} justify="center" alignItems="flex-end">
                 <Grid item xs={1}>
                   <Lock />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={11}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                     <Input
@@ -199,13 +224,21 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                       }
                       value={password}
                     />
-                    <FormHelperText id="component-error-text">{helperText}</FormHelperText>
                   </FormControl>
                 </Grid>
+              </Grid>
+              <Grid container item xs={12} style={{ marginBottom: 10 }}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={11} style={{ textAlign: 'left' }}>
+                  <span style={{ color: 'red' }}>{passwordText}</span>
+                </Grid>
+              </Grid>
+
+              <Grid container item xs={12} justify="center" alignItems="flex-end">
                 <Grid item xs={1}>
                   <EnhancedEncryptionIcon />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={11}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="standard-adornment-confirm-password">
                       Confirm Password
@@ -225,14 +258,20 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                         </InputAdornment>
                       }
                       onChange={onChangeConfirmPasswordValue}
-                      error={checkConformPassword}
+                      error={checkConfirmPassword}
                       value={rePassword}
                     />
-                    <FormHelperText id="component-error-text">{helperText}</FormHelperText>
                   </FormControl>
                 </Grid>
               </Grid>
-              <Grid container xs={12} alignItems="flex-end">
+              <Grid container item xs={12} style={{ marginBottom: 10 }}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={11} style={{ textAlign: 'left' }}>
+                  <span style={{ color: 'red' }}>{rePasswordText}</span>
+                </Grid>
+              </Grid>
+
+              <Grid container item xs={12} justify="center" alignItems="flex-end">
                 <Grid item xs={1}>
                   <LocalDiningIcon />
                 </Grid>
@@ -246,16 +285,43 @@ function Signup(props: InjectedProps & RouteComponentProps) {
                   />
                 </Grid>
               </Grid>
-              <Grid container xs={12} alignItems="flex-end">
+
+              <Grid container item xs={12} justify="flex-end" alignItems="flex-end">
+                <Grid item xs={1}>
+                  <AddIcCallIcon />
+                </Grid>
+                <Grid item xs={9}>
+                  <TextField
+                    fullWidth
+                    id="standard-adornment-phone-number"
+                    label="PHONE NUMBER"
+                    value={phoneNumber}
+                    onChange={onChangePhoneNumber}
+                  />
+                </Grid>
+                <Grid container item xs={2} justify="flex-end">
+                  <Button
+                    disabled={checkPhoneNumber}
+                    style={{
+                      borderColor: '#5FBEBB',
+                      width: '80%',
+                    }}
+                  >
+                    <span style={{ color: '#5FBEBB' }}>인증</span>
+                  </Button>
+                </Grid>
+              </Grid>
+
+              <Grid container item xs={12} justify="flex-end" alignItems="flex-end">
                 <Button
                   style={{
                     backgroundColor: '#5FBEBB',
                     borderColor: 'white',
-                    marginTop: 20,
+                    marginTop: 50,
                     height: 50,
-                    width: '100%',
+                    width: '98%',
                   }}
-                  // onClick={onClickLogin}
+                  onClick={handleSignup}
                 >
                   <span style={{ color: 'white', fontSize: 20 }}>SIGNUP</span>
                 </Button>

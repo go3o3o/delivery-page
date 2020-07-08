@@ -80,7 +80,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
       <Content
         style={{
           backgroundColor: '#5FBEBB',
-          height: '80vh',
+          height: '100vh',
           position: 'relative',
         }}
       >
@@ -98,6 +98,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
               textAlign: 'center',
               backgroundColor: '#FFF',
               borderRadius: 20,
+              marginTop: 20,
               height: 460,
               padding: 10,
             }}

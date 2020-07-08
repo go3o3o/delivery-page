@@ -1,7 +1,7 @@
 {
-   "name": "baemin-web",
+   "name": "delivery-webapp",
    "version": "0.1.0",
-   "description": "배달의민족 웹페이지 ",
+   "description": "배달 웹페이지 ",
    "private": true,
    "workspaces": [
       "server",

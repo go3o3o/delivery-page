@@ -1,8 +1,12 @@
 import * as express from 'express';
 import * as jwt from 'jwt-simple';
 
+import { getConnectionManager } from 'typeorm';
+
 import { authConf } from '../config';
 import { Member } from '../entities/Member';
+
+import logger from '../logger';
 
 const router = express.Router();
 
@@ -27,20 +31,26 @@ router.post('/login', async (req, res) => {
 router.post('/signup', async (req, res) => {
   const { email, password, phone_number, nickname } = req.body;
 
-  const user = await Member.findOne({
-    where: { email },
-  });
+  const manager = getConnectionManager().get('delivery');
+  const repository = manager.getRepository(Member).createQueryBuilder();
 
-  if (user) {
-    return res.status(400).json({ msg: '이미 등록된 이메일 입니다.' });
+  try {
+    const user = await repository.where('email = :email', { email }).getOne();
+    if (user !== undefined) {
+      return res.json({ msg: '이미 등록된 이메일 입니다.' });
+    }
+
+    await repository
+      .insert()
+      .values({ email, password, phone_number, nickname })
+      .execute();
+
+    return res.json({
+      msg: '가입에 성공하였습니다.',
+    });
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
   }
-
-  const createdUser = await Member.create({ email, password, phone_number, nickname });
-
-  return res.json({
-    data: { seq: createdUser.seq },
-    msg: '가입에 성공하였습니다.',
-  });
 });
 
 export default router;

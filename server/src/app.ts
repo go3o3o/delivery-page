@@ -4,7 +4,7 @@ import * as http from 'http';
 import * as cors from 'cors';
 import { createConnection } from 'typeorm';
 
-import { dbConf } from './config';
+import { dbOptions } from './config';
 import logger from './logger';
 
 import authRouter from './routes/auth';
@@ -17,9 +17,13 @@ const stopServer = async (server: http.Server) => {
 
 async function runServer() {
   const app = express();
+  const corsOption = {
+    origin: 'http://localhost:8000',
+    credentials: true,
+  };
 
   app.use(express.json());
-  app.use(cors());
+  app.use(cors(corsOption));
   app.use(express.static(path.join(__dirname, '../../dist')));
   app.use('/auth', authRouter);
   app.use('/category', categoryRouter);
@@ -29,17 +33,10 @@ async function runServer() {
   });
 
   const server = app.listen(8000, () => {
-    logger.debug('Example app listening on port 8000!');
+    logger.info('Example app listening on port 8000!');
   });
 
-  await createConnection({
-    type: 'mysql',
-    host: dbConf.HOST,
-    port: dbConf.PORT,
-    username: dbConf.USERNAME,
-    password: dbConf.PASSWORD,
-    database: dbConf.DATABASE,
-  })
+  await createConnection(dbOptions)
     .then(async connection => {
       logger.debug('Connected to DB');
     })

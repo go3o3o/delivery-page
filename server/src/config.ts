@@ -1,5 +1,10 @@
 import * as dotenv from 'dotenv';
 
+import { ConnectionOptions } from 'typeorm';
+
+import { Member } from './entities/Member';
+import { Store } from './entities/Store';
+
 let path;
 switch (process.env.NODE_ENV) {
   case 'prod':
@@ -11,12 +16,15 @@ switch (process.env.NODE_ENV) {
 }
 dotenv.config({ path: path });
 
-export const dbConf = {
-  HOST: process.env.DB_HOST,
-  PORT: Number(process.env.DB_PORT),
-  USERNAME: process.env.DB_USERNAME,
-  PASSWORD: process.env.DB_PASSWORD,
-  DATABASE: process.env.DB_DATABASE,
+export let dbOptions: ConnectionOptions = {
+  type: 'mysql',
+  name: 'delivery',
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  entities: [Member, Store],
 };
 
 export const authConf = {

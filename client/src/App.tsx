@@ -26,6 +26,7 @@ export default class App extends Component {
             <Route path={PAGE_PATHS.SIGNUP} component={Signup} />
 
             <Route path={`${PAGE_PATHS.CATEGORY_LISTS}`} component={CategoryList} />
+            <Route path={`${PAGE_PATHS.CATEGORY_LISTS}/:category`} component={CategoryList} />
 
             <Redirect from="/" to={PAGE_PATHS.CATEGORY_LISTS} />
           </Switch>

@@ -26,7 +26,7 @@ export type AuthResponseDto = {
   nickname: string;
 };
 
-const API_HOST = process.env.API_HOST || 'http://localhost:8080/';
+const API_HOST = process.env.API_HOST || 'http://localhost:8000';
 
 class AuthService {
   async login(body: LoginRequestDto): Promise<ApiResponse<LoginResponseDto>> {

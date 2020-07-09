@@ -99,7 +99,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
               backgroundColor: '#FFF',
               borderRadius: 20,
               marginTop: 20,
-              height: 460,
+              height: '80%',
               padding: 10,
             }}
           >

@@ -15,6 +15,7 @@ class AuthStore {
   @observable email = '';
   @observable password = '';
   @observable nickname = '';
+  @observable phone_number = '';
   private authService = new AuthService();
 
   constructor() {

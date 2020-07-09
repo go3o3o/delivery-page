@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import { IconButton, FormHelperText } from '@material-ui/core';
+import { IconButton, Collapse } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,6 +11,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Alert from '@material-ui/lab/Alert';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Lock from '@material-ui/icons/Lock';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
@@ -19,7 +20,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import LocalDiningIcon from '@material-ui/icons/LocalDining';
 import AddIcCallIcon from '@material-ui/icons/AddIcCall';
 
-import { Layout, Divider, Button } from 'antd';
+import { Layout, Divider, Button, message } from 'antd';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
@@ -27,6 +28,9 @@ import Header from '../../components/Header';
 
 // @ts-ignore
 import Logo from '../../components/assets/logo.png';
+
+// TO DO LIST
+// 1. 사장님이세요? 추가
 
 const { Content } = Layout;
 
@@ -79,9 +83,16 @@ function Signup(props: InjectedProps & RouteComponentProps) {
         phone_number: phoneNumber,
         nickname: nickname,
       });
-      alert(result.data.msg);
+
+      if (result.data.code === 0) {
+        message.error(result.data.msg);
+      }
+      if (result.data.code === 1) {
+        message.info(result.data.msg);
+        location.href = 'http://localhost:8000/signin';
+      }
     } catch (err) {
-      console.log(err.response.data.msg);
+      console.log(err);
     }
     return false;
   };
@@ -169,7 +180,7 @@ function Signup(props: InjectedProps & RouteComponentProps) {
               backgroundColor: '#FFF',
               borderRadius: 20,
               marginTop: 20,
-              height: 550,
+              height: '80%',
               padding: 10,
             }}
           >

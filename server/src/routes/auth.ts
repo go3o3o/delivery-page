@@ -37,7 +37,7 @@ router.post('/signup', async (req, res) => {
   try {
     const user = await repository.where('email = :email', { email }).getOne();
     if (user !== undefined) {
-      return res.json({ msg: '이미 등록된 이메일 입니다.' });
+      return res.json({ code: 0, msg: '이미 등록된 이메일 입니다.' });
     }
 
     await repository
@@ -46,6 +46,7 @@ router.post('/signup', async (req, res) => {
       .execute();
 
     return res.json({
+      code: 1,
       msg: '가입에 성공하였습니다.',
     });
   } catch (e) {

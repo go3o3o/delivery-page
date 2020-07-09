@@ -19,7 +19,8 @@ CREATE TABLE tb_order (
 	order_yn VARCHAR(2) DEFAULT 'N' COMMENT '배달 완료 여부', 
 	reg_dt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '주문일자',
 	PRIMARY KEY (seq),
-	FOREIGN KEY (member_seq) REFERENCES tb_member(seq) ON UPDATE CASCADE
+	FOREIGN KEY (member_seq) REFERENCES tb_member(seq) ON UPDATE CASCADE,
+	FOREIGN KEY (menu_seq) REFERENCES tb_menu(seq) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='주문 테이블';
 
 CREATE TABLE tb_store ( 

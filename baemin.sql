@@ -15,7 +15,7 @@ CREATE TABLE tb_order (
 	seq SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '주문 시퀀스', 
 	order_md5 VARCHAR(50) NOT NULL COMMENT '주문번호 md5(회원 시퀀스+주문일자)',
     member_seq SMALLINT UNSIGNED NOT NULL COMMENT '회원 시퀀스',
-	menu_seq SMALLINT NOT NULL COMMENT '메뉴 시퀀스', 
+	menu_seq SMALLINT UNSIGNED NOT NULL COMMENT '메뉴 시퀀스', 
 	order_yn VARCHAR(2) DEFAULT 'N' COMMENT '배달 완료 여부', 
 	reg_dt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '주문일자',
 	PRIMARY KEY (seq),

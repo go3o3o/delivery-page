@@ -15,7 +15,7 @@ export class Store extends BaseEntity {
   public main_menu!: string;
 
   @Column()
-  public category!: string;
+  public category_seq!: number;
 
   @Column()
   public logo_img!: string;

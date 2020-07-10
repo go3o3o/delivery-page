@@ -26,11 +26,11 @@ CREATE TABLE tb_order (
 CREATE TABLE tb_store ( 
 	seq SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '가게 시퀀스', 
 	store_name VARCHAR(1000) NOT NULL COMMENT '가게명', 
-	store_phone_number VARCHAR(1000) NOT NULL COMMENT '가게 전화번호', 
+	store_phone_number VARCHAR(1000) DEFAULT '' COMMENT '가게 전화번호', 
 	store_location VARCHAR(2000) NOT NULL COMMENT '가게 위치', 
-	category VARCHAR(500) NOT NULL COMMENT '카테고리 분류 (한식/중식/일식 등)', 
-	logo_img VARCHAR(500) COMMENT '가게 로고', 
-	rating VARCHAR(10) COMMENT '별점', 
+	category SMALLINT NOT NULL COMMENT '카테고리 분류 (한식:0, 중식:1 )', 
+	logo_img VARCHAR(500) DEFAULT '' COMMENT '가게 로고', 
+	rating VARCHAR(10) DEFAULT 0 COMMENT '별점', 
 	order_count INTEGER NOT NULL DEFAULT 0 COMMENT '주문 수', 
 	dib_count INTEGER NOT NULL DEFAULT 0 COMMENT '찜 수', 
 	order_tip INTEGER NOT NULL DEFAULT 0 COMMENT '배달비', 
@@ -41,7 +41,7 @@ CREATE TABLE tb_store (
 	reg_dt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '등록일자',
 	upd_dt DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일자',
 	PRIMARY KEY (seq)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='가게 테이블'; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='가게 테이블';
 
 CREATE TABLE tb_menu (
 	seq SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '메뉴 시퀀스', 

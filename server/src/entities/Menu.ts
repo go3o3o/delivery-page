@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
-import * as bcrypt from 'bcrypt-nodejs';
 
 @Entity({ name: 'tb_menu' })
 export class Menu extends BaseEntity {

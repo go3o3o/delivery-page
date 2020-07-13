@@ -21,12 +21,10 @@ export default class App extends Component {
       <Layout>
         <Router>
           <Switch>
-            <Route path={PAGE_PATHS.CATEGORY_LISTS} component={CategoryList} />
             <Route path={PAGE_PATHS.SIGNIN} component={Login} />
             <Route path={PAGE_PATHS.SIGNUP} component={Signup} />
 
             <Route path={`${PAGE_PATHS.CATEGORY_LISTS}`} component={CategoryList} />
-            <Route path={`${PAGE_PATHS.CATEGORY_LISTS}/:address`} component={CategoryList} />
             <Route path={`${PAGE_PATHS.CATEGORY_LISTS}/:category`} component={CategoryList} />
             <Route path={`${PAGE_PATHS.STORE_LISTS}/:seq`} component={CategoryList} />
 

@@ -28,7 +28,7 @@ const API_HOST = process.env.API_HOST || 'http://localhost:8000';
 
 class StoreService {
   async getCategories(): Promise<ApiResponse<CategoryDto[]>> {
-    return axios.get(`${API_HOST}/category`);
+    return axios.post(`${API_HOST}/category`);
   }
 
   async getCategoryByAddress(address: string): Promise<ApiResponse<CategoryDto[]>> {

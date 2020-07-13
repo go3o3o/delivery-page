@@ -13,6 +13,7 @@ class StoreStore {
   @action
   async getCategories() {
     const response = await this.storeService.getCategories();
+    console.log(response.data.data);
     this.setCategories(response.data.data);
   }
 
@@ -28,14 +29,17 @@ class StoreStore {
     this.setStore(response.data.data);
   }
 
+  @action
   setCategories(categories: CategoryDto[]) {
     this.categories = categories;
   }
 
+  @action
   setStores(stores: StoreDto[]) {
     this.stores = stores;
   }
 
+  @action
   setStore(store: StoreDto) {
     this.store = store;
   }

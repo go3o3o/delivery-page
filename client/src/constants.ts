@@ -1,6 +1,6 @@
 export enum STORES {
   AUTH_STORE = 'authStore',
-  CATEGORY_STORE = 'categoryStore',
+  STORE_STORE = 'storeStore',
   MENU_STORE = 'menuStore',
 }
 

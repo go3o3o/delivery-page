@@ -32,12 +32,13 @@ class Header extends Component {
     this.onClickAddress = this.onClickAddress.bind(this);
   }
 
-  componentWillMount() {
+  componentWillMount(): void {
     this.getLocation();
   }
 
-  setAddress = e => {
-    this.setState({ address: e.target.value });
+  setAddress = async e => {
+    let address = e.target.value;
+    this.setState({ address });
   };
 
   // 키워드로 주소 찾기
@@ -196,7 +197,7 @@ class Header extends Component {
               />
               <div
                 className="demo-infinite-container"
-                style={{ position: 'absolute', marginLeft: 43, width: 450 }}
+                style={{ position: 'absolute', zIndex: 2, marginLeft: 43, width: 450 }}
               >
                 {this.state['visible'] && (
                   <List

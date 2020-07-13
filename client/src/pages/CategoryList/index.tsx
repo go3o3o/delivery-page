@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import Header from '../../components/Header';
 
+import StoreStore from '../../stores/store/StoreStore';
+
 const { Content } = Layout;
 
 type InjectedProps = {
-  [STORES.CATEGORY_STORE];
+  [STORES.CATEGORY_STORE]: StoreStore;
 };
 
 // 0: 한식, 1: 중식, 2: 분식, 3: 치킨, 4: 피자, 5: 패스트푸드, 6: 일식, 7: 양식, 8: 보쌈|족발, 9: 야식
-class CategoryList extends Component {
+class CategoryList extends Component<InjectedProps> {
+  componentWillMount(): void {}
+
   render() {
     let menuStyle = {
       display: 'table',
@@ -25,6 +29,8 @@ class CategoryList extends Component {
       textAlign: 'center',
       float: 'left',
     };
+
+    // const { categories } = this.props[STORES.CATEGORY_STORE];
     return (
       <>
         <Header />

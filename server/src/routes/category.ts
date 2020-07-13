@@ -3,12 +3,13 @@ import * as express from 'express';
 import { getConnectionManager } from 'typeorm';
 
 import { Store } from '../entities/Store';
+import { Category } from '../entities/Category';
 
 const router = express.Router();
 
 router.get('', async (req, res) => {
   const manager = getConnectionManager().get('delivery');
-  const repository = manager.getRepository(Store).createQueryBuilder();
+  const repository = manager.getRepository(Category).createQueryBuilder();
 
   try {
     const category = await repository.select().getMany();

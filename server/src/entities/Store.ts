@@ -9,10 +9,10 @@ export class Store extends BaseEntity {
   public store_name!: string;
 
   @Column()
-  public store_location!: string;
+  public store_phone_number!: string;
 
   @Column()
-  public main_menu!: string;
+  public store_location!: string;
 
   @Column()
   public category_seq!: number;
@@ -21,16 +21,28 @@ export class Store extends BaseEntity {
   public logo_img!: string;
 
   @Column()
+  public rating!: number;
+
+  @Column()
   public order_count!: number;
 
   @Column()
-  public steam_count!: number;
+  public dib_count!: number;
 
   @Column()
   public order_tip!: number;
 
   @Column()
   public order_time!: number;
+
+  @Column()
+  public order_price!: number;
+
+  @Column()
+  public description!: string;
+
+  @Column()
+  public notice!: string;
 
   public readonly reg_dt!: Date;
   public readonly upd_dt!: Date;

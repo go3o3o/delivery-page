@@ -8,5 +8,6 @@ export enum PAGE_PATHS {
   SIGNUP = '/signup',
   SIGNIN = '/signin',
   CATEGORY_LISTS = '/category',
-  STORE_LISTS = '/store',
+  STORE_LISTS = '/category',
+  STORE = '/store',
 }

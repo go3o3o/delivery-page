@@ -11,6 +11,7 @@ import { PAGE_PATHS, STORES } from './constants';
 import Login from './pages/Signin';
 import Signup from './pages/Signup';
 import CategoryList from './pages/CategoryList';
+import StoreList from './pages/StoreList';
 
 @inject(STORES.AUTH_STORE)
 @observer
@@ -24,9 +25,9 @@ export default class App extends Component {
             <Route path={PAGE_PATHS.SIGNIN} component={Login} />
             <Route path={PAGE_PATHS.SIGNUP} component={Signup} />
 
+            <Route path={`${PAGE_PATHS.STORE_LISTS}/:category`} component={StoreList} />
             <Route path={`${PAGE_PATHS.CATEGORY_LISTS}`} component={CategoryList} />
-            <Route path={`${PAGE_PATHS.CATEGORY_LISTS}/:category`} component={CategoryList} />
-            <Route path={`${PAGE_PATHS.STORE_LISTS}/:seq`} component={CategoryList} />
+            <Route path={`${PAGE_PATHS.STORE}/:seq`} component={CategoryList} />
 
             <Redirect from="/" to={`${PAGE_PATHS.CATEGORY_LISTS}`} />
           </Switch>

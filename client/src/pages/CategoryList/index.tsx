@@ -6,7 +6,6 @@ import { Layout } from 'antd';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import Header from '../../components/Header';
-
 import StoreStore from '../../stores/store/StoreStore';
 
 const { Content } = Layout;
@@ -38,7 +37,7 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
         <Header />
         <Content style={{ backgroundColor: '#5FBEBB', height: '100%', position: 'relative' }}>
           {categories.map(category => (
-            <Link to={`${PAGE_PATHS.CATEGORY_LISTS}/${category['seq']}`}>
+            <Link to={`${PAGE_PATHS.STORE_LISTS}/${category['seq']}`}>
               <div style={menuStyle}>
                 <span style={{ display: 'table-cell', verticalAlign: 'middle' }}>
                   {category['category_name']}

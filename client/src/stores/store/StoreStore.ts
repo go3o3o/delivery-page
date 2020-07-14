@@ -13,12 +13,11 @@ class StoreStore {
   @action
   async getCategories() {
     const response = await this.storeService.getCategories();
-    console.log(response.data.data);
     this.setCategories(response.data.data);
   }
 
   @action
-  async getStoreByCategory(category: number) {
+  async getStoreByCategory(category: string) {
     const response = await this.storeService.getStoreByCategory(category);
     this.setStores(response.data.data);
   }

@@ -27,7 +27,7 @@ router.get('/:category', async (req, res) => {
   const repository = manager.getRepository(Store).createQueryBuilder();
 
   try {
-    const stores = await repository.where('category = :category', { category }).getMany();
+    const stores = await repository.where('category_seq = :category', { category }).getMany();
 
     return res.json({ data: stores });
   } catch (e) {

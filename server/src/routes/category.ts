@@ -20,7 +20,7 @@ router.post('', async (req, res) => {
   }
 });
 
-router.get('/:category', async (req, res) => {
+router.post('/:category', async (req, res) => {
   const category = req.params.category;
 
   const manager = getConnectionManager().get('delivery');

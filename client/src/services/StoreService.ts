@@ -35,7 +35,7 @@ class StoreService {
     return axios.post(`${API_HOST}/category/${address}`);
   }
 
-  async getStoreByCategory(category: string, index: number): Promise<ApiResponse<StoreDto[]>> {
+  async getStoreByCategory(category: string): Promise<ApiResponse<StoreDto[]>> {
     return axios.post(`${API_HOST}/category/${category}`);
   }
 

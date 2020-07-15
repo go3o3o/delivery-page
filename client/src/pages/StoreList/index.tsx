@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { inject, observer } from 'mobx-react';
-import InfiniteScroll from 'react-infinite-scroller';
-import reqwest from 'reqwest';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Layout, List, Avatar, Spin } from 'antd';
 
@@ -16,21 +15,14 @@ type InjectedProps = {
   [STORES.STORE_STORE]: StoreStore;
 } & RouteComponentProps<{ category: string }>;
 
-// How to I use Infinite Scroll
-// 1. SELECT * FROM tb_store WHERE category_seq = ${category_seq} LIMIT ${index};
-// 2. loadStores: loadStores.concat(stores.slice(startIndex, endIndex))
 class StoreList extends Component<InjectedProps & RouteComponentProps> {
   constructor(props: any) {
     super(props);
-    // this.state = {
-    //   stores: [],
-    //   loadStores: [],
-    //   startIndex: 0,
-    //   endIndex: 19,
-    //   hasMore: true,
-    // };
     this.state = {
-      data: [],
+      stores: [],
+      loadStores: [],
+      startIndex: 0,
+      endIndex: 19,
       loading: false,
       hasMore: true,
     };
@@ -38,105 +30,71 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
     let category_seq = this.props.match.params.category;
     this.props[STORES.STORE_STORE].getStoreByCategory(category_seq);
 
-    // this.fetchData = this.fetchData.bind(this);
+    this.handleInfiniteOnLoad = this.handleInfiniteOnLoad.bind(this);
   }
 
   handleInfiniteOnLoad = () => {
     const { stores } = this.props[STORES.STORE_STORE];
-    console.log(stores.length);
-    if (stores.length > 14) {
-      this.setState({
-        hasMore: false,
-        loading: false,
-      });
-      return;
-    }
-    this.setState({ data: stores });
-  };
+    this.setState({ stores: stores });
 
-  /*
-  fetchMoreData = () => {
-    const { stores } = this.props[STORES.STORE_STORE];
-    this.setState({ stores });
+    let storeLength = stores.length;
+    let startIndex = this.state['startIndex'];
+    let endIndex = this.state['endIndex'];
 
-    if (this.state['stores'].length <= 20) {
-      this.setState({ endIndex: this.state['stores'].length });
+    if (storeLength < 20) {
+      this.setState({ endIndex: storeLength });
     }
 
-    console.log(this.state['hasMore']);
-    console.log(this.state['stores'].length, this.state['startIndex'], this.state['endIndex']);
-    if (this.state['stores'].length < this.state['startIndex']) {
-      this.setState({ hasMore: false });
+    if (storeLength < startIndex) {
+      this.setState({ hasMore: false, loading: false });
       return;
     }
 
-    if (this.state['stores'].length < this.state['endIndex']) {
-      this.setState({ endIndex: this.state['stores'].length });
+    if (storeLength < endIndex) {
+      this.setState({ endIndex: storeLength, hasMore: false, loading: false });
     }
 
     setTimeout(() => {
       this.setState({
         loadStores: this.state['loadStores'].concat(
-          this.state['stores'].slice(this.state['startIndex'], this.state['endIndex']),
+          this.state['stores'].slice(startIndex, endIndex),
         ),
       });
     }, 500);
 
-    console.log(this.state['loadStores']);
-    this.setState({ startIndex: this.state['startIndex'] + 20 });
-    this.setState({ endIndex: this.state['endIndex'] + 20 });
-
-    <InfiniteScroll
-      dataLength={this.state['loadStores'].length}
-      next={this.fetchMoreData}
-      hasMore={this.state['hasMore']}
-      loader={<h4>Loading...</h4>}
-      endMessage={
-        <p style={{ textAlign: 'center' }}>
-          <b>Yay! You have seen it all</b>
-        </p>
-      }
-    >
-      {this.state['loadStores'].map((store, index) => (
-        <div key={index}>{store.seq}</div>
-      ))}
-    </InfiniteScroll>;
+    this.setState({ startIndex: startIndex + 20 });
+    this.setState({ endIndex: endIndex + 20 });
   };
-  */
 
   render() {
     return (
       <>
         <Header />
-        <Content style={{ height: '100vh', position: 'relative' }}>
+        <Content style={{ backgroundColor: '#FFF', height: '100vh', position: 'relative' }}>
           <InfiniteScroll
-            initialLoad={false}
-            pageStart={0}
-            loadMore={this.handleInfiniteOnLoad}
+            dataLength={this.state['loadStores'].length}
+            next={this.handleInfiniteOnLoad}
             hasMore={!this.state['loading'] && this.state['hasMore']}
-            useWindow={false}
+            loader={
+              <div style={{ bottom: 40, width: '100%', textAlign: 'center' }}>
+                <Spin />
+              </div>
+            }
           >
             <List
-              dataSource={this.state['data']}
+              dataSource={this.state['loadStores']}
+              bordered
               renderItem={store => (
                 <List.Item key={store['seq']}>
+                  <img src={require(`../../components/assets/logo.png`)} alt="logo" />
                   <List.Item.Meta
-                    avatar={
-                      <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                    }
+                    // avatar={}
                     title={<a href="https://ant.design">{store['store_name']}</a>}
                     description={store['description']}
                   />
-                  <div>Content</div>
                 </List.Item>
               )}
-            >
-              {this.state['loading'] && this.state['hasMore'] && (
-                <div className="demo-loading-container">
-                  <Spin />
-                </div>
-              )}
-            </List>
+            ></List>
           </InfiniteScroll>
         </Content>
       </>

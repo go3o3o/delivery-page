@@ -35,16 +35,24 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
     return (
       <>
         <Header />
-        <Content style={{ backgroundColor: '#5FBEBB', height: '100%', position: 'relative' }}>
-          {categories.map(category => (
-            <Link to={`${PAGE_PATHS.STORE_LISTS}/${category['seq']}`}>
-              <div style={menuStyle}>
-                <span style={{ display: 'table-cell', verticalAlign: 'middle' }}>
-                  {category['category_name']}
-                </span>
-              </div>
-            </Link>
-          ))}
+        <Content
+          style={{
+            backgroundColor: '#5FBEBB',
+            height: '100%',
+            position: 'relative',
+          }}
+        >
+          <div style={{ textAlign: 'center' }}>
+            {categories.map(category => (
+              <Link to={`${PAGE_PATHS.STORE_LISTS}/${category['seq']}`}>
+                <div style={menuStyle}>
+                  <span style={{ display: 'table-cell', verticalAlign: 'middle' }}>
+                    {category['category_name']}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </Content>
       </>
     );

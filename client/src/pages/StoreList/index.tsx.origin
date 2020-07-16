@@ -36,8 +36,7 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
     };
 
     let category_seq = this.props.match.params.category;
-    let address = this.props[STORES.ADDRESS_STORE].address;
-    this.props[STORES.STORE_STORE].getStoreByCategoryAndAddress({ category_seq, address });
+    this.props[STORES.STORE_STORE].getStoreByCategory(category_seq);
 
     this.handleInfiniteOnLoad = this.handleInfiniteOnLoad.bind(this);
   }
@@ -76,6 +75,18 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
   };
 
   render() {
+    const { addressStore } = this.props;
+    const address = addressStore.address;
+
+    const loadCategoryList = (address: string) => {
+      console.log(address);
+      const storeStore = new StoreStore();
+
+      return storeStore.getCategories(address).then(res => {
+        return res.data;
+      });
+    };
+
     return (
       <>
         <Content style={{ backgroundColor: '#FFF', height: '100vh', position: 'relative' }}>

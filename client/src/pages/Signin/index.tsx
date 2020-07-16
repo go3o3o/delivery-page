@@ -76,7 +76,6 @@ function Signin(props: InjectedProps & RouteComponentProps) {
 
   return (
     <>
-      <Header />
       <Content
         style={{
           backgroundColor: '#5FBEBB',

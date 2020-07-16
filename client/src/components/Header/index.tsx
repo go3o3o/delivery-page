@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import autobind from 'autobind-decorator';
 
 import { Layout, Input, Button, Row, Col, List, Space } from 'antd';
 import { AimOutlined, SearchOutlined } from '@ant-design/icons';
@@ -8,12 +9,19 @@ import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 import Grid from '@material-ui/core/Grid';
 
 import { PAGE_PATHS, STORES } from '../../constants';
-import AuthStore from '../../stores/auth/AuthStore';
+import AddressStore from '../../stores/address/AddressStore';
 
 // @ts-ignore
 import Logo from '../assets/logo2.png';
 
-class Header extends Component {
+type InjectedProps = {
+  [STORES.ADDRESS_STORE]: AddressStore;
+};
+
+@inject(STORES.ADDRESS_STORE)
+@observer
+@autobind
+class Header extends Component<InjectedProps & RouteComponentProps> {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,9 +44,14 @@ class Header extends Component {
     this.getLocation();
   }
 
+  componentDidUpdate() {
+    this.props[STORES.ADDRESS_STORE].setAddress(this.state['address']);
+  }
+
   setAddress = async e => {
     let address = e.target.value;
     this.setState({ address });
+    this.props[STORES.ADDRESS_STORE].setAddress(address);
   };
 
   // 키워드로 주소 찾기

@@ -7,6 +7,7 @@ import { Layout } from 'antd';
 import { PAGE_PATHS, STORES } from '../../constants';
 import Header from '../../components/Header';
 import StoreStore from '../../stores/store/StoreStore';
+import AddressStore from '../../stores/address/AddressStore';
 
 const { Content } = Layout;
 
@@ -14,7 +15,13 @@ type InjectedProps = {
   [STORES.STORE_STORE]: StoreStore;
 };
 
+@inject(STORES.STORE_STORE)
+@observer
 class CategoryList extends Component<InjectedProps & RouteComponentProps> {
+  constructor(props: any) {
+    super(props);
+  }
+
   componentWillMount(): void {
     this.props[STORES.STORE_STORE].getCategories();
   }
@@ -32,9 +39,9 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
     };
 
     const { categories } = this.props[STORES.STORE_STORE];
+
     return (
       <>
-        <Header />
         <Content
           style={{
             backgroundColor: '#5FBEBB',
@@ -59,4 +66,4 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
   }
 }
 
-export default inject(STORES.STORE_STORE)(observer(CategoryList));
+export default CategoryList;

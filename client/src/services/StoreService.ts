@@ -2,6 +2,11 @@ import axios from 'axios';
 
 import { ApiResponse } from '../services/types';
 
+export type StoreRequestDto = {
+  category_seq: string;
+  address: string;
+};
+
 export type StoreDto = {
   seq?: number;
   store_name?: string;
@@ -37,6 +42,10 @@ class StoreService {
 
   async getStoreByCategory(category: string): Promise<ApiResponse<StoreDto[]>> {
     return axios.post(`${API_HOST}/category/${category}`);
+  }
+
+  async getStoreByCategoryAndAddress(body: StoreRequestDto): Promise<ApiResponse<StoreDto[]>> {
+    return axios.post(`${API_HOST}/category`, body);
   }
 
   async getStore(seq: number): Promise<ApiResponse<StoreDto>> {

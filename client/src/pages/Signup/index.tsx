@@ -157,7 +157,6 @@ function Signup(props: InjectedProps & RouteComponentProps) {
 
   return (
     <>
-      <Header />
       <Content
         style={{
           backgroundColor: '#5FBEBB',

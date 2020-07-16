@@ -1,6 +1,7 @@
 import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
-import StoreService, { CategoryDto, StoreDto } from '../../services/StoreService';
+
+import StoreService, { CategoryDto, StoreDto, StoreRequestDto } from '../../services/StoreService';
 
 @autobind
 class StoreStore {
@@ -8,7 +9,7 @@ class StoreStore {
   @observable stores: StoreDto[] = [];
   @observable store: StoreDto = {} as StoreDto;
 
-  constructor(private storeService: StoreService) {}
+  private storeService = new StoreService();
 
   @action
   async getCategories() {
@@ -19,6 +20,12 @@ class StoreStore {
   @action
   async getStoreByCategory(category: string) {
     const response = await this.storeService.getStoreByCategory(category);
+    this.setStores(response.data.data);
+  }
+
+  @action
+  async getStoreByCategoryAndAddress(store: StoreRequestDto) {
+    const response = await this.storeService.getStoreByCategoryAndAddress(store);
     this.setStores(response.data.data);
   }
 

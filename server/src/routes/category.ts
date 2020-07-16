@@ -7,7 +7,7 @@ import { Category } from '../entities/Category';
 
 const router = express.Router();
 
-router.post('', async (req, res) => {
+router.get('', async (req, res) => {
   const manager = getConnectionManager().get('delivery');
   const repository = manager.getRepository(Category).createQueryBuilder();
 

@@ -9,6 +9,7 @@ import logger from './logger';
 
 import authRouter from './routes/auth';
 import categoryRouter from './routes/category';
+import menuRouter from './routes/menu';
 
 const stopServer = async (server: http.Server) => {
   await server.close();
@@ -27,6 +28,7 @@ async function runServer() {
   app.use(express.static(path.join(__dirname, '../../dist')));
   app.use('/auth', authRouter);
   app.use('/category', categoryRouter);
+  app.use('/menu', menuRouter);
 
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../../dist/index.html'));

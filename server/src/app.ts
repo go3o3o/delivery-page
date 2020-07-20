@@ -9,6 +9,7 @@ import logger from './logger';
 
 import authRouter from './routes/auth';
 import categoryRouter from './routes/category';
+import storeRouter from './routes/store';
 import menuRouter from './routes/menu';
 
 const stopServer = async (server: http.Server) => {
@@ -28,6 +29,7 @@ async function runServer() {
   app.use(express.static(path.join(__dirname, '../../dist')));
   app.use('/auth', authRouter);
   app.use('/category', categoryRouter);
+  app.use('/store', storeRouter);
   app.use('/menu', menuRouter);
 
   app.get('*', (req, res) => {

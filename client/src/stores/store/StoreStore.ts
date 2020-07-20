@@ -18,19 +18,13 @@ class StoreStore {
   }
 
   @action
-  async getStoreByCategory(category: string) {
-    const response = await this.storeService.getStoreByCategory(category);
-    this.setStores(response.data.data);
-  }
-
-  @action
   async getStoreByCategoryAndAddress(store: StoreRequestDto) {
     const response = await this.storeService.getStoreByCategoryAndAddress(store);
     this.setStores(response.data.data);
   }
 
   @action
-  async getStore(seq: number) {
+  async getStore(seq: string) {
     const response = await this.storeService.getStore(seq);
     this.setStore(response.data.data);
   }

@@ -15,13 +15,13 @@ import AddressStore from '../../stores/address/AddressStore';
 import Logo from '../assets/logo2.png';
 
 type InjectedProps = {
-  [STORES.ADDRESS_STORE]: AddressStore;
+  [STORES.ADDRESS_STORE]?: AddressStore;
 };
 
 @inject(STORES.ADDRESS_STORE)
 @observer
 @autobind
-class Header extends Component<InjectedProps & RouteComponentProps> {
+class Header extends Component<InjectedProps> {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import autobind from 'autobind-decorator';
@@ -37,6 +38,7 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
 
     let category_seq = this.props.match.params.category;
     let address = this.props[STORES.ADDRESS_STORE].address;
+
     this.props[STORES.STORE_STORE].getStoreByCategoryAndAddress({ category_seq, address });
 
     this.handleInfiniteOnLoad = this.handleInfiniteOnLoad.bind(this);
@@ -45,6 +47,8 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
   handleInfiniteOnLoad = () => {
     const { stores } = this.props[STORES.STORE_STORE];
     this.setState({ stores: stores });
+
+    console.log(stores);
 
     let storeLength = stores.length;
     let startIndex = this.state['startIndex'];
@@ -94,10 +98,15 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
               bordered
               renderItem={store => (
                 <List.Item key={store['seq']}>
-                  <img src={require(`../../components/assets/logo.png`)} alt="logo" />
+                  <img
+                    src="/Users/yoni/d-platform/30.DMap/00.workspace/test/client/src/components/assets/logo.png"
+                    alt="logo"
+                  />
                   <List.Item.Meta
                     // avatar={}
-                    title={<a href="https://ant.design">{store['store_name']}</a>}
+                    title={
+                      <a href={`${PAGE_PATHS.MENU_LISTS}/${store['seq']}`}>{store['store_name']}</a>
+                    }
                     description={store['description']}
                   />
                 </List.Item>

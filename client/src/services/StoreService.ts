@@ -25,7 +25,7 @@ export type StoreDto = {
 };
 
 export type CategoryDto = {
-  seq?: number;
+  seq?: string;
   categoryName?: string;
 };
 
@@ -36,20 +36,12 @@ class StoreService {
     return axios.post(`${API_HOST}/category`);
   }
 
-  async getCategoryByAddress(address: string): Promise<ApiResponse<CategoryDto[]>> {
-    return axios.post(`${API_HOST}/category/${address}`);
-  }
-
-  async getStoreByCategory(category: string): Promise<ApiResponse<StoreDto[]>> {
-    return axios.post(`${API_HOST}/category/${category}`);
-  }
-
   async getStoreByCategoryAndAddress(body: StoreRequestDto): Promise<ApiResponse<StoreDto[]>> {
-    return axios.post(`${API_HOST}/category`, body);
+    return axios.post(`${API_HOST}/store`, body);
   }
 
-  async getStore(seq: number): Promise<ApiResponse<StoreDto>> {
-    return axios.post(`${API_HOST}/category/${seq}`);
+  async getStore(seq: string): Promise<ApiResponse<StoreDto>> {
+    return axios.post(`${API_HOST}/store/${seq}`);
   }
 }
 

@@ -8,9 +8,14 @@ import { Layout } from 'antd';
 import './css/style.css';
 import 'antd/dist/antd.css';
 
-import { STORES } from './constants';
+import { STORES, PAGE_PATHS } from './constants';
 import Header from './components/Header';
-import Body from './components/Body';
+
+import Login from './pages/Signin';
+import Signup from './pages/Signup';
+import CategoryList from './pages/CategoryList';
+import StoreList from './pages/StoreList';
+import { MenuList } from '@material-ui/core';
 
 @inject(STORES.AUTH_STORE)
 @observer
@@ -21,7 +26,18 @@ export default class App extends Component {
       <Layout>
         <Router>
           <Header />
-          <Body />
+
+          <Switch>
+            <Route path={PAGE_PATHS.SIGNIN} component={Login} />
+            <Route path={PAGE_PATHS.SIGNUP} component={Signup} />
+
+            <Route path={`${PAGE_PATHS.CATEGORY_LISTS}`} component={CategoryList} />
+            <Route path={`${PAGE_PATHS.STORE_LISTS}/:category`} component={StoreList} />
+            <Route path={`${PAGE_PATHS.STORE_LISTS}/:seq`} component={StoreList} />
+            <Route path={`${PAGE_PATHS.MENU_LISTS}/:store `} component={MenuList} />
+
+            <Redirect from="/" to={`${PAGE_PATHS.CATEGORY_LISTS}`} />
+          </Switch>
         </Router>
       </Layout>
     );

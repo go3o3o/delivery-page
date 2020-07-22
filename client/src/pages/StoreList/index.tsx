@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import autobind from 'autobind-decorator';
-import Async from 'react-async';
 
 import { Layout, List, Avatar, Spin } from 'antd';
 
@@ -18,7 +17,7 @@ const { Content } = Layout;
 type InjectedProps = {
   [STORES.STORE_STORE]: StoreStore;
   [STORES.ADDRESS_STORE]: AddressStore;
-} & RouteComponentProps<{ category: string }>;
+} & RouteComponentProps<{ category_seq: string }>;
 
 @inject(STORES.STORE_STORE)
 @inject(STORES.ADDRESS_STORE)
@@ -36,10 +35,13 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
       hasMore: true,
     };
 
-    let category_seq = this.props.match.params.category;
+    let category_seq = this.props.match.params.category_seq;
     let address = this.props[STORES.ADDRESS_STORE].address;
 
-    this.props[STORES.STORE_STORE].getStoreByCategoryAndAddress({ category_seq, address });
+    this.props[STORES.STORE_STORE].getStoreByCategoryAndAddress({
+      category_seq: category_seq,
+      address: address,
+    });
 
     this.handleInfiniteOnLoad = this.handleInfiniteOnLoad.bind(this);
   }
@@ -98,14 +100,12 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
               bordered
               renderItem={store => (
                 <List.Item key={store['seq']}>
-                  <img
-                    src="/Users/yoni/d-platform/30.DMap/00.workspace/test/client/src/components/assets/logo.png"
-                    alt="logo"
-                  />
+                  <img src="images/logo192.png" alt={store['store_name']} />
                   <List.Item.Meta
-                    // avatar={}
                     title={
-                      <a href={`${PAGE_PATHS.MENU_LISTS}/${store['seq']}`}>{store['store_name']}</a>
+                      <Link to={`${PAGE_PATHS.MENU_LISTS}/${store['seq']}`}>
+                        {store['store_name']}
+                      </Link>
                     }
                     description={store['description']}
                   />

@@ -38,6 +38,7 @@ class Header extends Component<InjectedProps> {
     this.getLocation = this.getLocation.bind(this);
     this.getLocationAddress = this.getLocationAddress.bind(this);
     this.onClickAddress = this.onClickAddress.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
   }
 
   componentWillMount(): void {
@@ -51,12 +52,19 @@ class Header extends Component<InjectedProps> {
   setAddress = async e => {
     let address = e.target.value;
     this.setState({ address });
+
+    // console.log(address);
     this.props[STORES.ADDRESS_STORE].setAddress(address);
+  };
+
+  onKeyPress = e => {
+    if (e.key === 'Enter') {
+      this.getAddress();
+    }
   };
 
   // 키워드로 주소 찾기
   getAddress = () => {
-    // console.log(this.state['address']);
     if (this.state['address'].length > 0) {
       fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${this.state['address']}`, {
         method: 'GET',
@@ -128,7 +136,7 @@ class Header extends Component<InjectedProps> {
     }
   };
 
-  setAddressListVisible = () => {
+  setAddressListVisible = e => {
     if (!this.state['visible']) {
       document.addEventListener('click', this.handleOutsideClick, !this.state['visible']);
     }
@@ -140,7 +148,7 @@ class Header extends Component<InjectedProps> {
     this.setState({ visible: false });
   };
 
-  onClickAddress = item => {
+  onClickAddress = (item: any) => {
     this.setState({ address: item.address_name });
     this.setState({ visible: false });
   };
@@ -207,6 +215,7 @@ class Header extends Component<InjectedProps> {
                 value={this.state['address']}
                 onChange={this.setAddress}
                 onClick={this.setAddressListVisible}
+                onKeyPress={this.onKeyPress}
               />
               <div
                 className="demo-infinite-container"
@@ -222,10 +231,10 @@ class Header extends Component<InjectedProps> {
                       <List.Item
                         key={item.id}
                         className={item.id}
-                        onClick={() => this.onClickAddress(item)}
                         id="listItem"
                         onMouseEnter={this.toggleEnter}
                         onMouseLeave={this.toggleLeave}
+                        onMouseDown={() => this.onClickAddress(item)}
                       >
                         <List.Item.Meta title={item.place_name} description={item.address_name} />
                       </List.Item>

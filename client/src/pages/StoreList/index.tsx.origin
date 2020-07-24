@@ -23,6 +23,9 @@ type InjectedProps = {
 @inject(STORES.STORE_STORE)
 @inject(STORES.ADDRESS_STORE)
 class StoreList extends Component<InjectedProps & RouteComponentProps> {
+  @observable
+  loading = false;
+
   constructor(props: any) {
     super(props);
 
@@ -32,21 +35,40 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
     this.state = {
       stores: [],
       items: 20,
+      loading: false,
       hasMoreItems: true,
+      category_seq: category_seq,
+      address,
     };
 
     this.props[STORES.STORE_STORE]
       .getStoreByCategoryAndAddress({
-        category_seq: category_seq,
-        address: address,
+        category_seq: this.state['category_seq'],
+        address: this.state['address'],
       })
       .then(data => {
         if (data.length < this.state['items']) {
           this.setState({ items: data.length });
         }
         this.setState({ stores: data });
+        this.loading = true;
+        data;
       });
+    this.loadItems = this.loadItems.bind(this);
   }
+
+  loadItems = () => {
+    console.log(this.state['category_seq']);
+    return this.props[STORES.STORE_STORE]
+      .getStoreByCategoryAndAddress({
+        category_seq: this.state['category_seq'],
+        address: this.state['address'],
+      })
+      .then(res => {
+        console.log(res.data.data);
+        return res.data;
+      });
+  };
 
   showItems = () => {
     let items = [];
@@ -72,16 +94,38 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
   render() {
     return (
       <Content style={{ backgroundColor: '#FFF', height: '100vh', position: 'relative' }}>
-        {this.state['stores'].length > 0 && (
-          <InfiniteScroll
-            initialLoad
-            loadMore={this.loadMore.bind(this)}
-            hasMore={this.state['hasMoreItems']}
-            loader={<div>loading...</div>}
-          >
-            {this.showItems()}
-          </InfiniteScroll>
-        )}
+
+        <InfiniteScroll></InfiniteScroll>
+        {/* <Async promise={this.loadItems()}>
+          <Async.Loading>
+            <div style={{ position: 'absolute', top: '50%', left: '50%' }}>
+              <Spin size="large" />
+            </div>
+          </Async.Loading>
+          <Async.Resolved>
+            {(data: object) => {
+              return (
+                <List
+                  dataSource={data['data']}
+                  bordered
+                  renderItem={store => (
+                    <List.Item key={store['seq']}>
+                      <img src="images/logo192.png" alt={store['store_name']} />
+                      <List.Item.Meta
+                        title={
+                          <Link to={`${PAGE_PATHS.MENU_LISTS}/${store['seq']}`}>
+                            {store['store_name']}
+                          </Link>
+                        }
+                        description={store['description']}
+                      />
+                    </List.Item>
+                  )}
+                ></List>
+              );
+            }}
+          </Async.Resolved>
+        </Async> */}
       </Content>
     );
   }

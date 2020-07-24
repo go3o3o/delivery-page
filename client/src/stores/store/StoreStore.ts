@@ -20,8 +20,8 @@ class StoreStore {
   @action
   async getStoreByCategoryAndAddress(store: StoreRequestDto) {
     const response = await this.storeService.getStoreByCategoryAndAddress(store);
-    console.log(response.data.data);
     this.setStores(response.data.data);
+    return response.data.data;
   }
 
   @action

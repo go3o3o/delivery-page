@@ -73,10 +73,11 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
           <div style={{ textAlign: 'center' }}>
             {categories.map(category => (
               <Link
+                key={category['seq']}
                 to={
                   this.goToLink && address.length > 0
                     ? `${PAGE_PATHS.STORE_LISTS}/${category['seq']}`
-                    : undefined
+                    : `#`
                 }
               >
                 <div style={menuStyle} onClick={this.onClickCategory}>

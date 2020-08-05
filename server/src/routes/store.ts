@@ -31,13 +31,13 @@ router.post('', async (req, res) => {
 });
 
 router.post('/:seq', async (req, res) => {
-  const store_seq = req.params.seq;
+  const seq = req.params.seq;
 
   const manager = getConnectionManager().get('delivery');
   const repository = manager.getRepository(Store).createQueryBuilder();
 
   try {
-    const store = await repository.where('seq = :store_seq', { seq: store_seq }).getOne();
+    const store = await repository.where('seq = :seq', { seq }).getOne();
 
     return res.json({ data: store });
   } catch (e) {

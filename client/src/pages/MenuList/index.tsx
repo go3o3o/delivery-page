@@ -20,17 +20,21 @@ type InjectedProps = {
 @inject(STORES.MENU_STORE)
 @inject(STORES.STORE_STORE)
 @observer
-@autobind
 class MenuList extends Component<InjectedProps & RouteComponentProps> {
   constructor(props: any) {
     super(props);
 
     const store_seq = this.props.match.params.store_seq;
-    props[STORES.STORE_STORE].getStore(store_seq);
-    props[STORES.MENU_STORE].getMenu(store_seq);
+    this.props[STORES.STORE_STORE].getStore(store_seq);
+    this.props[STORES.MENU_STORE].getMenu(store_seq);
   }
 
   render() {
+    const { store } = this.props[STORES.STORE_STORE];
+    const { menu } = this.props[STORES.MENU_STORE];
+
+    console.log(store);
+    console.log(menu);
     return (
       <>
         <Content style={{ backgroundColor: '#FFF', height: '100vh', position: 'relative' }}>

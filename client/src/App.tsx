@@ -33,7 +33,7 @@ export default class App extends Component {
 
             <Route path={`${PAGE_PATHS.CATEGORY_LISTS}`} component={CategoryList} />
             <Route path={`${PAGE_PATHS.STORE_LISTS}/:category_seq`} component={StoreList} />
-            <Route path={`${PAGE_PATHS.MENU_LISTS}/:store_seq `} component={MenuList} />
+            <Route path={`${PAGE_PATHS.MENU_LISTS}/:store_seq`} component={MenuList} />
 
             <Redirect from="/" to={`${PAGE_PATHS.CATEGORY_LISTS}`} />
           </Switch>

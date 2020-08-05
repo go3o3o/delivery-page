@@ -53,7 +53,14 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
 
     for (var i = 0; i < this.state['items']; i++) {
       if (this.state['stores'][i] !== undefined) {
-        items.push(<li>{this.state['stores'][i]['store_name']}</li>);
+        items.push(
+          <Link
+            key={this.state['stores'][i]['seq']}
+            to={`${PAGE_PATHS.MENU_LISTS}/${this.state['stores'][i]['seq']}`}
+          >
+            <li>{this.state['stores'][i]['store_name']}</li>
+          </Link>,
+        );
       }
     }
     return items;

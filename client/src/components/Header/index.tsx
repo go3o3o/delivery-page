@@ -153,19 +153,6 @@ class Header extends Component<InjectedProps> {
     this.setState({ visible: false });
   };
 
-  toggleEnter = e => {
-    let target = e.target;
-    if (target.id == 'listItem') {
-      target.style.background = '#5FBEBB';
-    }
-  };
-  toggleLeave = e => {
-    let target = e.target;
-    if (target.id == 'listItem') {
-      target.style.background = '#FFF';
-    }
-  };
-
   render() {
     return (
       <>
@@ -231,9 +218,6 @@ class Header extends Component<InjectedProps> {
                       <List.Item
                         key={item.id}
                         className={item.id}
-                        id="listItem"
-                        onMouseEnter={this.toggleEnter}
-                        onMouseLeave={this.toggleLeave}
                         onMouseDown={() => this.onClickAddress(item)}
                       >
                         <List.Item.Meta title={item.place_name} description={item.address_name} />

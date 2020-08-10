@@ -33,8 +33,6 @@ class MenuList extends Component<InjectedProps & RouteComponentProps> {
     const { store } = this.props[STORES.STORE_STORE];
     const { menu } = this.props[STORES.MENU_STORE];
 
-    console.log(store);
-    console.log(menu);
     return (
       <>
         <Content style={{ backgroundColor: '#FFF', height: '100vh', position: 'relative' }}>

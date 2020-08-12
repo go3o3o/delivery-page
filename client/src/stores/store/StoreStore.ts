@@ -27,7 +27,6 @@ class StoreStore {
   @action
   async getStore(seq: string) {
     const response = await this.storeService.getStore(seq);
-    console.log(response.data.data);
     this.setStore(response.data.data);
   }
 

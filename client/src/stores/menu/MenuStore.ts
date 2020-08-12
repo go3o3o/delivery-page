@@ -12,6 +12,7 @@ class MenuStore {
   async getMenu(store_seq: string) {
     const response = await this.menuService.getMenu(store_seq);
     this.setMenu(response.data.data);
+    return response.data;
   }
 
   @action

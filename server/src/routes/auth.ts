@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
       const isValidPassword = user.validPassword(password);
       if (isValidPassword) {
         const token = jwt.encode({ seq: user.seq, email: user.email }, authConf.AUTH_KEY);
-        res.json({ data: { token, user }, msg: '로그인 성공!' });
+        return res.json({ data: { token, user }, msg: '로그인 성공!' });
       } else {
         return res.json({ code: 0, msg: '비밀번호가 잘못 되었습니다.' });
       }

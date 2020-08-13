@@ -63,6 +63,14 @@ function Signin(props: InjectedProps & RouteComponentProps) {
     }
   };
 
+  const changeEmail = (v: ChangeEvent<HTMLInputElement>) => {
+    authStore.setEmail(v.target.value);
+  };
+
+  const changePassword = (v: ChangeEvent<HTMLInputElement>) => {
+    authStore.setPassword(v.target.value);
+  };
+
   const formItemStyle = {
     display: 'inline-block',
     width: '80%',
@@ -81,6 +89,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
           backgroundColor: '#5FBEBB',
           height: '100vh',
           position: 'relative',
+          width: '100%',
         }}
       >
         <div
@@ -89,6 +98,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
             width: '80%',
             top: '50%',
             left: '50%',
+            minWidth: 400,
             transform: `translate(-50%, -50%)`,
           }}
         >
@@ -111,6 +121,8 @@ function Signin(props: InjectedProps & RouteComponentProps) {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="E-MAIL"
+                value={authStore.email}
+                onChange={changeEmail}
                 style={{ height: 40 }}
               />
             </Form.Item>
@@ -119,6 +131,8 @@ function Signin(props: InjectedProps & RouteComponentProps) {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="PASSWORD"
+                value={authStore.password}
+                onChange={changePassword}
                 style={{ height: 40 }}
               />
             </Form.Item>

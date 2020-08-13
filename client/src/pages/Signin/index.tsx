@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import { Layout, Divider, Form, Input, Button, Checkbox } from 'antd';
+import { Layout, Divider, Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined, TranslationOutlined } from '@ant-design/icons';
 
 import { PAGE_PATHS, STORES } from '../../constants';
@@ -55,11 +55,11 @@ function Signin(props: InjectedProps & RouteComponentProps) {
   const onClickLogin = async (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-    try {
-      await authStore.login();
+    const result = await authStore.login();
+    if (result.data.code === 0) {
+      message.error(result.data.msg);
+    } else {
       history.push(PAGE_PATHS.CATEGORY_LISTS);
-    } catch (err) {
-      alert(err.response.data.msg);
     }
   };
 

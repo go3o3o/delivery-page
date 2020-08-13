@@ -44,6 +44,7 @@ class AuthStore {
     };
     const response = await this.authService.login(body);
     this.setToken(response.data.data.token);
+    return response;
   }
 
   @action

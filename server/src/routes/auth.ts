@@ -13,18 +13,25 @@ const router = express.Router();
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await Member.findOne({ where: { email } });
+  const manager = getConnectionManager().get('delivery');
+  const repository = manager.getRepository(Member).createQueryBuilder();
 
-  if (user) {
-    const isValidPassword = user.validPassword(password);
-    if (isValidPassword) {
-      const token = jwt.encode({ seq: user.seq, email: user.email }, authConf.AUTH_KEY);
-      res.json({ data: { token, user }, msg: '로그인 성공!' });
+  try {
+    const user = await repository.where('email = :email', { email }).getOne();
+
+    if (user) {
+      const isValidPassword = user.validPassword(password);
+      if (isValidPassword) {
+        const token = jwt.encode({ seq: user.seq, email: user.email }, authConf.AUTH_KEY);
+        res.json({ data: { token, user }, msg: '로그인 성공!' });
+      } else {
+        return res.json({ code: 0, msg: '비밀번호가 잘못 되었습니다.' });
+      }
     } else {
-      return res.status(400).json({ msg: '비밀번호가 잘 못 되었습니다.' });
+      return res.json({ code: 0, msg: '해당하는 사용자가 없습니다.' });
     }
-  } else {
-    return res.status(404).json({ msg: '해당하는 사용자가 없습니다.' });
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
   }
 });
 

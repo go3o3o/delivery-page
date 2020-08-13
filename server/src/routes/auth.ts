@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as jwt from 'jwt-simple';
+import * as bcrypt from 'bcrypt-nodejs';
 
 import { getConnectionManager } from 'typeorm';
 
@@ -47,9 +48,11 @@ router.post('/signup', async (req, res) => {
       return res.json({ code: 0, msg: '이미 등록된 이메일 입니다.' });
     }
 
+    const passwordHash = bcrypt.hashSync(password);
+
     await repository
       .insert()
-      .values({ email, password, phone_number, nickname })
+      .values({ email, password: passwordHash, phone_number, nickname })
       .execute();
 
     return res.json({

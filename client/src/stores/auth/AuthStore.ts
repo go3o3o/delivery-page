@@ -74,7 +74,7 @@ class AuthStore {
   }
 
   @action
-  signout() {
+  signOut() {
     window.sessionStorage.removeItem('jwt');
     this.token = null;
     this.auth = undefined;

@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
 
-import { Layout, Input, Button, Row, Col, List, Space, Affix } from 'antd';
-import { AimOutlined, SearchOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { Layout, Input, Button, List } from 'antd';
+import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
 import Grid from '@material-ui/core/Grid';
 import Badge from '@material-ui/core/Badge';
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AddressStore from '../../stores/address/AddressStore';
@@ -21,15 +18,6 @@ import Logo from '../assets/logo2.png';
 type InjectedProps = {
   [STORES.ADDRESS_STORE]?: AddressStore;
 };
-
-const StyledBadge = withStyles(theme => ({
-  badge: {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
-}))(Badge);
 
 @inject(STORES.ADDRESS_STORE)
 @observer
@@ -44,7 +32,12 @@ class Header extends Component<InjectedProps> {
       latitude: 0,
       address: '',
       addressList: [],
+      login: false,
     };
+
+    const user = window.sessionStorage.getItem('jwt');
+
+    console.log(user);
 
     this.getAddress = this.getAddress.bind(this);
     this.setAddress = this.setAddress.bind(this);

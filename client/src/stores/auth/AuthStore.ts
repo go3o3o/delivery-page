@@ -10,7 +10,7 @@ export type Auth = {
 
 @autobind
 class AuthStore {
-  @observable token: string | null = window.sessionStorage.getItem('jwt');
+  @observable token: string | null = window.localStorage.getItem('jwt');
   @observable auth: Auth | undefined;
   @observable email = '';
   @observable password = '';
@@ -26,7 +26,7 @@ class AuthStore {
     reaction(
       () => this.token,
       token => {
-        if (token != null) window.sessionStorage.setItem('jwt', token);
+        if (token != null) window.localStorage.setItem('jwt', token);
       },
     );
   }
@@ -76,7 +76,7 @@ class AuthStore {
 
   @action
   signOut() {
-    window.sessionStorage.removeItem('jwt');
+    window.localStorage.removeItem('jwt');
     this.token = null;
     this.auth = undefined;
   }

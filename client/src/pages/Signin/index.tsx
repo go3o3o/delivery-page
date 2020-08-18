@@ -3,12 +3,12 @@ import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import { Layout, Divider, Form, Input, Button, Checkbox, message } from 'antd';
+import { Layout, Divider, Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, TranslationOutlined } from '@ant-design/icons';
+import Grid from '@material-ui/core/Grid';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
-import Header from '../../components/Header';
 
 // @ts-ignore
 import Logo from '../../components/assets/logo.png';
@@ -29,6 +29,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
   const { authStore, history } = props;
 
   useEffect(() => {
+    authStore.resetPasswordAndEmail();
     Naver();
     Kakao();
   }, []);
@@ -59,7 +60,13 @@ function Signin(props: InjectedProps & RouteComponentProps) {
     if (result.data.code === 0) {
       message.error(result.data.msg);
     } else {
-      history.push(PAGE_PATHS.CATEGORY_LISTS);
+      location.href = '/';
+      // history.push(PAGE_PATHS.CATEGORY_LISTS);
+    }
+  };
+  const onKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      onClickLogin(e);
     }
   };
 
@@ -87,28 +94,21 @@ function Signin(props: InjectedProps & RouteComponentProps) {
       <Content
         style={{
           backgroundColor: '#5FBEBB',
-          height: '100vh',
           position: 'relative',
+          height: '100%',
           width: '100%',
+          minWidth: 850,
         }}
       >
-        <div
-          style={{
-            position: 'absolute',
-            width: '80%',
-            top: '50%',
-            left: '50%',
-            minWidth: 400,
-            transform: `translate(-50%, -50%)`,
-          }}
-        >
+        <Grid container justify="space-around" alignItems="center">
           <div
             style={{
               textAlign: 'center',
               backgroundColor: '#FFF',
               borderRadius: 20,
-              marginTop: 20,
+              margin: 20,
               height: '80%',
+              width: '80%',
               padding: 10,
             }}
           >
@@ -134,6 +134,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
                 value={authStore.password}
                 onChange={changePassword}
                 style={{ height: 40 }}
+                onKeyPress={onKeyPress}
               />
             </Form.Item>
             <Form.Item>
@@ -169,7 +170,7 @@ function Signin(props: InjectedProps & RouteComponentProps) {
               </Link>
             </Form.Item>
           </div>
-        </div>
+        </Grid>
       </Content>
     </>
   );

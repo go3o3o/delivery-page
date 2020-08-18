@@ -7,19 +7,21 @@ import { Layout, Input, Button, List } from 'antd';
 import { AimOutlined, SearchOutlined } from '@ant-design/icons';
 
 import Grid from '@material-ui/core/Grid';
-import Badge from '@material-ui/core/Badge';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AddressStore from '../../stores/address/AddressStore';
+import AuthStore from '../../stores/auth/AuthStore';
 
 // @ts-ignore
 import Logo from '../assets/logo2.png';
 
 type InjectedProps = {
   [STORES.ADDRESS_STORE]?: AddressStore;
+  [STORES.AUTH_STORE]?: AuthStore;
 };
 
 @inject(STORES.ADDRESS_STORE)
+@inject(STORES.AUTH_STORE)
 @observer
 @autobind
 class Header extends Component<InjectedProps> {
@@ -35,10 +37,6 @@ class Header extends Component<InjectedProps> {
       login: false,
     };
 
-    const user = window.sessionStorage.getItem('jwt');
-
-    console.log(user);
-
     this.getAddress = this.getAddress.bind(this);
     this.setAddress = this.setAddress.bind(this);
     this.getLocation = this.getLocation.bind(this);
@@ -49,11 +47,22 @@ class Header extends Component<InjectedProps> {
 
   componentWillMount(): void {
     this.getLocation();
+    const user = window.localStorage.getItem('jwt');
+    if (user) {
+      this.setState({ login: true });
+    } else {
+      this.setState({ login: false });
+    }
   }
 
   componentDidUpdate() {
     this.props[STORES.ADDRESS_STORE].setAddress(this.state['address']);
   }
+
+  signout = () => {
+    this.props[STORES.AUTH_STORE].signOut();
+    location.href = '/';
+  };
 
   setAddress = async e => {
     let address = e.target.value;
@@ -234,9 +243,9 @@ class Header extends Component<InjectedProps> {
                 )}
               </div>
             </div>
-
-            <Link to={`${PAGE_PATHS.SIGNIN}`}>
+            {this.state['login'] ? (
               <Button
+                onClick={this.signout}
                 style={{
                   backgroundColor: '#5FBEBB',
                   borderColor: 'white',
@@ -244,9 +253,22 @@ class Header extends Component<InjectedProps> {
                   verticalAlign: 'middle',
                 }}
               >
-                <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
+                <span style={{ color: 'white', fontSize: 20 }}>로그아웃</span>
               </Button>
-            </Link>
+            ) : (
+              <Link to={`${PAGE_PATHS.SIGNIN}`}>
+                <Button
+                  style={{
+                    backgroundColor: '#5FBEBB',
+                    borderColor: 'white',
+                    height: 40,
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  <span style={{ color: 'white', fontSize: 20 }}>로그인 | 회원가입</span>
+                </Button>
+              </Link>
+            )}
           </Grid>
         </Layout>
 

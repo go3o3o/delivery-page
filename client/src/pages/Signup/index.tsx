@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import { IconButton, Collapse } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,7 +11,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Alert from '@material-ui/lab/Alert';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Lock from '@material-ui/icons/Lock';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
@@ -24,13 +23,9 @@ import { Layout, Divider, Button, message } from 'antd';
 
 import { PAGE_PATHS, STORES } from '../../constants';
 import AuthStore from '../../stores/auth/AuthStore';
-import Header from '../../components/Header';
 
 // @ts-ignore
 import Logo from '../../components/assets/logo.png';
-
-// TO DO LIST
-// 1. 사장님이세요? 추가
 
 const { Content } = Layout;
 
@@ -160,26 +155,21 @@ function Signup(props: InjectedProps & RouteComponentProps) {
       <Content
         style={{
           backgroundColor: '#5FBEBB',
-          height: '100vh',
           position: 'relative',
+          height: '100%',
+          width: '100%',
+          minWidth: 850,
         }}
       >
-        <div
-          style={{
-            position: 'absolute',
-            width: '80%',
-            top: '50%',
-            left: '50%',
-            transform: `translate(-50%, -50%)`,
-          }}
-        >
+        <Grid container justify="space-around" alignItems="center">
           <div
             style={{
               textAlign: 'center',
               backgroundColor: '#FFF',
               borderRadius: 20,
-              marginTop: 20,
+              margin: 20,
               height: '80%',
+              width: '80%',
               padding: 10,
             }}
           >
@@ -338,7 +328,7 @@ function Signup(props: InjectedProps & RouteComponentProps) {
               </Grid>
             </div>
           </div>
-        </div>
+        </Grid>
       </Content>
     </>
   );

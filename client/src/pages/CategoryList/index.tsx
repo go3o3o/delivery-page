@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, CSSProperties } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { observable, action } from 'mobx';
 
 import { Layout, message } from 'antd';
 
+import Grid from '@material-ui/core/Grid';
+
 import { PAGE_PATHS, STORES } from '../../constants';
-import Header from '../../components/Header';
 import StoreStore from '../../stores/store/StoreStore';
 import AddressStore from '../../stores/address/AddressStore';
-import { observable, action } from 'mobx';
 
 const { Content } = Layout;
 
@@ -48,7 +49,7 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
   };
 
   render() {
-    let menuStyle = {
+    let menuStyle: CSSProperties = {
       display: 'table',
       borderRadius: '70%',
       backgroundColor: '#FFF',
@@ -66,11 +67,13 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
         <Content
           style={{
             backgroundColor: '#5FBEBB',
-            height: '100%',
             position: 'relative',
+            height: '100%',
+            width: '100%',
+            minWidth: 850,
           }}
         >
-          <div style={{ textAlign: 'center' }}>
+          <Grid container justify="space-around" alignItems="center">
             {categories.map(category => (
               <Link
                 key={category['seq']}
@@ -87,7 +90,7 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
                 </div>
               </Link>
             ))}
-          </div>
+          </Grid>
         </Content>
       </>
     );

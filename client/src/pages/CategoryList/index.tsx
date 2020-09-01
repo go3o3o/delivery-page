@@ -57,7 +57,6 @@ class CategoryList extends Component<InjectedProps & RouteComponentProps> {
       width: 200,
       height: 200,
       textAlign: 'center',
-      float: 'left',
     };
 
     const { categories } = this.props[STORES.STORE_STORE];

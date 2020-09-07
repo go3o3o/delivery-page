@@ -13,7 +13,7 @@ router.post('', async (req, res) => {
   const repository = manager.getRepository(Store).createQueryBuilder();
 
   try {
-    let re = /([가-힣]+(d{1,5}|)+(시|군|구))( |)([가-힣]+(d{1,5}|)+(동))/g;
+    let re = /([가-힣]+(d{1,5}|)+(시|군|구))/g;
     let matched = re.exec(address);
 
     const stores = await repository

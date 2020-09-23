@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box';
 import { STORES } from '../../constants';
 import StoreStore from '../../stores/store/StoreStore';
 import List from './List';
+import StoreDetail from '../StoreDetail';
 
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
@@ -57,6 +58,7 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
       value: Number(category_seq) - 1,
       category_seq,
       address,
+      store_seq: 0,
     };
   }
 
@@ -65,11 +67,11 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
   }
 
   handleChange = (event: any, newValue: number) => {
-    this.setState({ value: newValue, category_seq: String(newValue + 1) });
+    this.setState({ value: newValue, category_seq: String(newValue + 1), store_seq: 0 });
   };
 
   clickStore = (store_seq: number) => {
-    console.log(store_seq);
+    this.setState({ store_seq });
   };
 
   render() {
@@ -94,17 +96,22 @@ class StoreList extends Component<InjectedProps & RouteComponentProps> {
               })}
             </Tabs>
           </AppBar>
-          {categories.map((category: object) => {
-            return (
-              <TabPanel value={this.state['value']} index={category['seq'] - 1}>
-                <List
-                  storeStore={this.props[STORES.STORE_STORE]}
-                  category_seq={this.state['category_seq']}
-                  address={this.state['address']}
-                />
-              </TabPanel>
-            );
-          })}
+          {this.state['store_seq'] === 0 ? (
+            categories.map((category: object) => {
+              return (
+                <TabPanel value={this.state['value']} index={category['seq'] - 1}>
+                  <List
+                    storeStore={this.props[STORES.STORE_STORE]}
+                    category_seq={this.state['category_seq']}
+                    address={this.state['address']}
+                    clickStore={this.clickStore}
+                  />
+                </TabPanel>
+              );
+            })
+          ) : (
+            <StoreDetail store_seq={this.state['store_seq']} />
+          )}
         </div>
       </>
     );

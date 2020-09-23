@@ -13,16 +13,17 @@ const { Content } = Layout;
 type InjectedProps = {
   [STORES.MENU_STORE]?: MenuStore;
   [STORES.STORE_STORE]?: StoreStore;
-} & RouteComponentProps<{ store_seq: string }>;
+  store_seq: string;
+};
 
 @inject(STORES.MENU_STORE)
 @inject(STORES.STORE_STORE)
 @observer
-class StoreDetail extends Component<InjectedProps & RouteComponentProps> {
+class StoreDetail extends Component<InjectedProps> {
   constructor(props: any) {
     super(props);
 
-    const store_seq = this.props.match.params.store_seq;
+    const store_seq = this.props.store_seq;
     this.state = {
       store_seq: store_seq,
     };

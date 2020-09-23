@@ -11,6 +11,7 @@ type ListProps = {
   storeStore: StoreStore;
   category_seq: string;
   address: string;
+  clickStore: any;
 };
 
 function List(props: ListProps) {
@@ -35,14 +36,18 @@ function List(props: ListProps) {
     });
   };
 
+  const onClickStore = (store_seq: number) => {
+    props.clickStore(store_seq);
+  };
+
   const showStores = () => {
     let returnStores = [];
     for (let i = 0; i < items; i++) {
       if (stores[i] !== undefined) {
         returnStores.push(
-          <Link key={stores[i].seq} to={`${PAGE_PATHS.MENU_LISTS}/${stores[i].seq}`}>
-            <li>{stores[i].store_name}</li>
-          </Link>,
+          <a onClick={() => onClickStore(stores[i].seq)}>
+            <li> {stores[i].store_name}</li>
+          </a>,
         );
       }
     }
@@ -62,7 +67,6 @@ function List(props: ListProps) {
   return (
     stores.length > 0 && (
       <InfiniteScroll
-        // initialLoad
         loadMore={loadMore}
         hasMore={hasMoreItems}
         loader={

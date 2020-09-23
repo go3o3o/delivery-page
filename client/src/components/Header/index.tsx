@@ -56,6 +56,7 @@ class Header extends Component<InjectedProps> {
   }
 
   componentDidUpdate() {
+    window.sessionStorage.setItem('address', this.state['address']);
     this.props[STORES.ADDRESS_STORE].setAddress(this.state['address']);
   }
 
@@ -67,8 +68,8 @@ class Header extends Component<InjectedProps> {
   setAddress = async e => {
     let address = e.target.value;
     this.setState({ address });
+    window.sessionStorage.setItem('address', address);
 
-    // console.log(address);
     this.props[STORES.ADDRESS_STORE].setAddress(address);
   };
 
@@ -164,6 +165,7 @@ class Header extends Component<InjectedProps> {
   };
 
   onClickAddress = (item: any) => {
+    window.sessionStorage.setItem('address', item.address_name);
     this.setState({ address: item.address_name });
     this.setState({ visible: false });
   };

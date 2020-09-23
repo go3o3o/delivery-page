@@ -9,10 +9,10 @@ import Badge from '@material-ui/core/Badge';
 import { withStyles } from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
-import { STORES } from '../../constants';
-import { MenuDto } from '../../services/MenuService';
-import MenuStore from '../../stores/menu/MenuStore';
-import StoreStore from '../../stores/store/StoreStore';
+import { STORES } from '../../../constants';
+import { MenuDto } from '../../../services/MenuService';
+import MenuStore from '../../../stores/menu/MenuStore';
+import StoreStore from '../../../stores/store/StoreStore';
 
 const { Content } = Layout;
 
@@ -84,7 +84,6 @@ class MenuList extends Component<InjectedProps & RouteComponentProps> {
               </Async.Loading>
               <Async.Resolved>
                 {(data: any) => {
-                  console.log(data.mainMenus);
                   return (
                     <>
                       <div style={{ border: 'red' }}>

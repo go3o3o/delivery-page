@@ -1,93 +1,112 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import InfiniteScroll from 'react-infinite-scroller';
 
-import { Layout, List, Avatar, Spin } from 'antd';
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
-import { PAGE_PATHS, STORES } from '../../constants';
+import { STORES } from '../../constants';
 import StoreStore from '../../stores/store/StoreStore';
-import AddressStore from '../../stores/address/AddressStore';
-import { observable } from 'mobx';
+import List from './List';
 
-const { Content } = Layout;
+function TabPanel(props: any) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div role="tabpanel" hidden={value !== index}>
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
+}
 
 type InjectedProps = {
   [STORES.STORE_STORE]: StoreStore;
-  [STORES.ADDRESS_STORE]: AddressStore;
 } & RouteComponentProps<{ category_seq: string }>;
 
 @inject(STORES.STORE_STORE)
-@inject(STORES.ADDRESS_STORE)
+@observer
 class StoreList extends Component<InjectedProps & RouteComponentProps> {
   constructor(props: any) {
     super(props);
 
     let category_seq = this.props.match.params.category_seq;
-    let address = this.props[STORES.ADDRESS_STORE].address;
+    let address = window.sessionStorage.getItem('address');
 
     this.state = {
-      stores: [],
-      items: 20,
-      hasMoreItems: true,
+      value: Number(category_seq) - 1,
+      category_seq,
+      address,
     };
-
-    this.props[STORES.STORE_STORE]
-      .getStoreByCategoryAndAddress({
-        category_seq: category_seq,
-        address: address,
-      })
-      .then(data => {
-        if (data.length < this.state['items']) {
-          this.setState({ items: data.length });
-        }
-        this.setState({ stores: data });
-      });
   }
 
-  showItems = () => {
-    let items = [];
+  componentWillMount() {
+    this.props[STORES.STORE_STORE].getCategories();
+  }
 
-    for (var i = 0; i < this.state['items']; i++) {
-      if (this.state['stores'][i] !== undefined) {
-        items.push(
-          <Link
-            key={this.state['stores'][i]['seq']}
-            to={`${PAGE_PATHS.MENU_LISTS}/${this.state['stores'][i]['seq']}`}
-          >
-            <li>{this.state['stores'][i]['store_name']}</li>
-          </Link>,
-        );
-      }
-    }
-    return items;
+  handleChange = (event: any, newValue: number) => {
+    this.setState({ value: newValue, category_seq: String(newValue + 1) });
   };
 
-  loadMore = () => {
-    if (this.state['items'] >= this.state['stores'].length) {
-      this.setState({ hasMoreItems: false });
-    } else {
-      setTimeout(() => {
-        this.setState({ items: this.state['items'] + 20 });
-      }, 1000);
-    }
+  clickStore = (store_seq: number) => {
+    console.log(store_seq);
   };
 
   render() {
+    const { categories } = this.props[STORES.STORE_STORE];
+
     return (
-      <Content style={{ backgroundColor: '#FFF', height: '100vh', position: 'relative' }}>
-        {this.state['stores'].length > 0 && (
-          <InfiniteScroll
-            initialLoad
-            loadMore={this.loadMore.bind(this)}
-            hasMore={this.state['hasMoreItems']}
-            loader={<div>loading...</div>}
-          >
-            {this.showItems()}
-          </InfiniteScroll>
-        )}
-      </Content>
+      <>
+        <div>
+          <AppBar position="static" color="default">
+            <Tabs
+              value={this.state['value']}
+              onChange={this.handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="scrollable"
+              scrollButtons="auto"
+            >
+              {categories.map((category: object) => {
+                return (
+                  <Tab label={category['category_name']} {...a11yProps(category['seq'] - 1)} />
+                );
+              })}
+            </Tabs>
+          </AppBar>
+          {categories.map((category: object) => {
+            return (
+              <TabPanel value={this.state['value']} index={category['seq'] - 1}>
+                <List
+                  storeStore={this.props[STORES.STORE_STORE]}
+                  category_seq={this.state['category_seq']}
+                  address={this.state['address']}
+                />
+              </TabPanel>
+            );
+          })}
+        </div>
+      </>
     );
   }
 }

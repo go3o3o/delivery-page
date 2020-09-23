@@ -15,7 +15,7 @@ import Login from './pages/Signin';
 import Signup from './pages/Signup';
 import CategoryList from './pages/CategoryList';
 import StoreList from './pages/StoreList';
-import MenuList from './pages/MenuList';
+import StoreDetail from './pages/StoreDetail';
 
 @inject(STORES.AUTH_STORE)
 @observer
@@ -33,7 +33,7 @@ export default class App extends Component {
 
             <Route path={`${PAGE_PATHS.CATEGORY_LISTS}`} component={CategoryList} />
             <Route path={`${PAGE_PATHS.STORE_LISTS}/:category_seq`} component={StoreList} />
-            <Route path={`${PAGE_PATHS.MENU_LISTS}/:store_seq`} component={MenuList} />
+            <Route path={`${PAGE_PATHS.MENU_LISTS}/:store_seq`} component={StoreDetail} />
 
             <Redirect from="/" to={`${PAGE_PATHS.CATEGORY_LISTS}`} />
           </Switch>

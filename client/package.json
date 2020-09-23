@@ -56,7 +56,7 @@
     "react": "^0.14.0 || ^15.0.0 || ^16",
     "react-async": "^10.0.1",
     "react-dom": "^0.14.0 || ^15.0.0 || ^16",
-    "react-infinite-scroller": "^1.2.4",
+    "react-infinite-scroller": "^1.2.1",
     "react-modal": "^3.11.1",
     "react-router-dom": "^5.1.2",
     "workflow-engine": "^0.0.0"

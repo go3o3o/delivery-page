@@ -83,30 +83,21 @@ class MenuList extends Component<InjectedProps> {
               {(data: any) => {
                 return (
                   <>
-                    <div style={{ border: 'red' }}>
-                      <List
-                        // itemLayout="vertical"
-                        dataSource={data.mainMenus}
-                        renderItem={(item: any) => (
-                          <List.Item key={item.title}>
-                            <List.Item.Meta
-                              avatar={<Avatar src={item.menu_img} />}
-                              title={<a href={item.href}>{item.title}</a>}
-                              description={item.description}
-                            />
-                            {item.content}
-                          </List.Item>
-                        )}
-                      />
-                    </div>
                     <div>
                       <List
                         itemLayout="vertical"
                         dataSource={data.menus}
                         renderItem={(item: any) => (
-                          <List.Item key={item.title}>
+                          <List.Item
+                            key={item.title}
+                            extra={
+                              <img
+                                width={100}
+                                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                              />
+                            }
+                          >
                             <List.Item.Meta
-                              avatar={<Avatar src={item.menu_img} />}
                               title={<a href={item.href}>{item.title}</a>}
                               description={item.description}
                             />

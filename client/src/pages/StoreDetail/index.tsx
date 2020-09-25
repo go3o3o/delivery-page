@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { RouteComponentProps, Route } from 'react-router';
 import { inject, observer } from 'mobx-react';
 
-import { Layout, List, Avatar, Spin, Affix, Button } from 'antd';
+import { Layout, Grid, Tabs, Card } from 'antd';
 
 import { STORES } from '../../constants';
 import MenuStore from '../../stores/menu/MenuStore';
 import StoreStore from '../../stores/store/StoreStore';
 
+import MenuList from './MenuList';
+import StoreInfo from './StoreInfo';
+import ReviewList from './ReviewList';
+
 const { Content } = Layout;
+const { TabPane } = Tabs;
 
 type InjectedProps = {
   [STORES.MENU_STORE]?: MenuStore;
@@ -29,11 +33,31 @@ class StoreDetail extends Component<InjectedProps> {
     };
   }
 
+  componentWillMount() {
+    this.props[STORES.STORE_STORE].getStore(this.state['store_seq']);
+  }
+
   render() {
+    const { store } = this.props[STORES.STORE_STORE];
     return (
-      <>
-        <div>StoreDetail</div>
-      </>
+      <Content style={{ backgroundColor: '#FFF', height: '100vh', position: 'relative' }}>
+        <div>
+          <Card title={store['store_name']}>{store['store_location']}</Card>
+        </div>
+        <div>
+          <Tabs defaultActiveKey="1" size="large">
+            <TabPane tab="메뉴" key="1">
+              <MenuList store_seq={this.state['store_seq']} />
+            </TabPane>
+            <TabPane tab="정보" key="2">
+              <StoreInfo store_seq={this.state['store_seq']} />
+            </TabPane>
+            <TabPane tab="리뷰" key="3">
+              <ReviewList store_seq={this.state['store_seq']} />
+            </TabPane>
+          </Tabs>
+        </div>
+      </Content>
     );
   }
 }
